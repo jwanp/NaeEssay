@@ -17,8 +17,8 @@ export default function NavBar() {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     return (
-        <div>
-            <div className="flex h-16 bg-white px-6 shadow-sm justify-between max-w-7xl mx-auto items-center ">
+        <div className=" bg-white px-6">
+            <div className="flex h-16 shadow-sm justify-between max-w-7xl mx-auto items-center ">
                 <Link href="/">Nae Essay</Link>
                 <div className="md:flex font-light text-sm hidden  ">
                     <label className="inline-flex cursor-pointer">
