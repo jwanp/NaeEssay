@@ -62,7 +62,7 @@ export default function NavBar() {
                 </div>
             </div>
             {isOpen && (
-                <div className="bg-white flex flex-col py-5 px-6 gap-3">
+                <div className="bg-white flex flex-col py-5 px-6 gap-3 md:hidden">
                     <Link
                         href="/signin"
                         className="flex justify-center items-center font-light h-9 mx-5  text-white text-center bg-green-500 hover:bg-green-600 transition duration-300 rounded-md">
