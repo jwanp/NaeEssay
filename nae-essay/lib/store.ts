@@ -2,9 +2,12 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { NavSlice } from './features/navbar/navSlice';
 export const makeStore = () => {
     return configureStore({
-        reducer: {},
+        reducer: {
+            navOpen: NavSlice.reducer,
+        },
     });
 };
 
