@@ -40,7 +40,7 @@ export default function NavBar() {
                     </Link>
                     <Link
                         href="/signin"
-                        className="mx-5 px-4 py-1 text-white text-center bg-green-500 hover:bg-green-600 transition duration-300 rounded-sm">
+                        className="mx-5 px-4 py-1 text-white text-center bg-green-400 hover:bg-green-300 transition duration-300 rounded-sm">
                         Sign in
                     </Link>
                 </div>
