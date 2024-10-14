@@ -39,7 +39,7 @@ export default function SideBar() {
             <ul className="p-3">
                 {essay.content.map((outlineContent, i) => {
                     return (
-                        <li className="flex mb-2">
+                        <li className="flex mb-2" key={i}>
                             {editTopic == Edit.Delete && (
                                 <button
                                     className="flex items-center p-2 bg-blue-400 rounded-s-md shadow-md text-white hover:bg-blue-300"

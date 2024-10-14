@@ -1,9 +1,14 @@
 'use client';
 
+import Editor from '../../components/Editor/Editor';
 import SideBar from './sideBar';
-import { useAppSelector } from '@/lib/hooks';
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { changeContent } from '@/lib/features/essay/essaySlice';
+
 export default function Write() {
+    const dispatch = useAppDispatch();
     const essay = useAppSelector((state) => state.essay);
+
     return (
         <div className="max-w-7xl md:min-h-screen flex flex-col md:flex-row m-auto">
             <SideBar></SideBar>
@@ -17,9 +22,10 @@ export default function Write() {
                     </div>
                     {essay.content.map((outlineContent, i) => {
                         return (
-                            <div className="py-3 px-5 shadow-sm" id={i.toString()}>
-                                <p className="p-1">{outlineContent.outline}</p>
+                            <div className="py-3 px-5 shadow-sm break-words" key={i.toString()}>
+                                <p className="p-2 pl-4 text-2xl dark:text-white',">{outlineContent.outline}</p>
                                 <p className="font-light">{outlineContent.content}</p>
+                                <Editor idx={i} />
                             </div>
                         );
                     })}

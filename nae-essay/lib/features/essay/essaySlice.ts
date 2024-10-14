@@ -21,7 +21,7 @@ const initialState: Essay = {
         {
             outline: '1. outline',
             content:
-                'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iure fugit rerum odit quas eos fugiat in suscipit unde ipsa. Consectetur, molestiae! Molestiae minima voluptatum ipsa voluptate eaque, nemo iusto harum tenetur asperiores quam, omnis aliquid ex! Nihil pariatur inventore, magni autem ut ipsa, nostrum, quod qui iure esse illo dignissimos veniam vero! Saepe officia deleniti excepturi voluptas corporis voluptatibus optio praesentium laborum culpa provident. Odio delectus natus, perspiciatis quasi error, inventore aliquid quisquam cupiditate rem suscipit iusto illum numquam necessitatibus? Explicabo voluptates ut iure velit nobis adipisci minima repudiandae earum, quaerat dignissimos? Amet alias a voluptas ex nobis doloribus nihil.',
+                '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}',
         },
     ],
     public: false,
