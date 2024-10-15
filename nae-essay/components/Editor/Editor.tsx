@@ -6,6 +6,7 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import MyOnChangePlugin from '@/components/Editor/plugins/MyOnChangePlugin';
 
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { ListNode, ListItemNode } from '@lexical/list';
@@ -29,6 +30,7 @@ import { FloatingMenuPlugin } from './plugins/FloatingMenu';
 import { AutoLinkPlugin } from './plugins/LinkPlugin';
 import editorTheme from './EditorThems';
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
+import RestoreFromReduxPlugin from './plugins/RestoreFromReduxPlugin';
 
 const EDITOR_NODES = [
     AutoLinkNode,
@@ -45,9 +47,15 @@ const EDITOR_NODES = [
 export default function Editor({ idx }: { idx: number }) {
     const dispatch = useAppDispatch();
     const essay = useAppSelector((state) => state.essay);
-    // const initialEditorState: EditorState = JSON.parse(essay.content[idx].content);
+    // PlugIn 을 따로 만들어서 저장한다.
+    // const initialEditorState: JSON = JSON.parse(essay.content[idx].content);
 
-    const editorStateRef = useRef<EditorState | undefined>(undefined);
+    function onContentChange(editorState: EditorState, idx: number) {
+        const editorStateJSON = editorState.toJSON();
+        dispatch(changeContent({ value: JSON.stringify(editorStateJSON), idx: idx }));
+    }
+
+    // const editorStateRef = useRef<EditorState | undefined>(undefined);
 
     const saveEssayContent = (value: string, idx: number) => {
         dispatch(changeContent({ value, idx }));
@@ -55,7 +63,6 @@ export default function Editor({ idx }: { idx: number }) {
 
     const initialConfig: ComponentProps<typeof LexicalComposer>['initialConfig'] = {
         namespace: 'MyEditor',
-        // editorState: initialEditorState,
         nodes: EDITOR_NODES,
         // theme: {
         //     link: 'cursor-pointer underline text-blue-600 hover:text-blue-800 visited:text-purple-600',
@@ -93,16 +100,17 @@ export default function Editor({ idx }: { idx: number }) {
                     }
                     ErrorBoundary={LexicalErrorBoundary}></RichTextPlugin>
             </div>
-            <OnChangePlugin
+            {/* <OnChangePlugin
                 onChange={(editorState) => {
                     editorStateRef.current = editorState; // database 에 저장 하려면 .toJSON 과 JSON.stringfy 를 이용해야한다.
                 }}
-            />
+            /> */}
+            <MyOnChangePlugin onChange={onContentChange} idx={idx} />
             <button
                 onClick={() => {
-                    if (editorStateRef.current) {
-                        saveEssayContent(JSON.stringify(editorStateRef.current), idx);
-                    }
+                    // if (editorStateRef.current) {
+                    //     saveEssayContent(JSON.stringify(editorStateRef.current), idx);
+                    // }
                 }}></button>
             <HistoryPlugin />
             <AutoFocusPlugin />
@@ -113,6 +121,7 @@ export default function Editor({ idx }: { idx: number }) {
             <AutoLinkPlugin />
             {/* <CodeHighlightPlugin /> */}
             <LexicalClickableLinkPlugin newTab={true} disabled={false} />
+            <RestoreFromReduxPlugin idx={idx} />
         </LexicalComposer>
     );
 }

@@ -16,7 +16,7 @@ export default function Write() {
                 <div>
                     <div className="flex items-center w-full bg-gray-400 text-white border border-b border-b-gray-300 p-3 ">
                         <h1 className="flex-1 text-lg">{essay.topic}</h1>
-                        <button className="px-2 rounded-md bg-blue-500 font-light h-8 hover:bg-blue-400 duration-300">
+                        <button className="px-2 rounded-md text-black bg-white font-light h-8  hover:text-gray-400 duration-300">
                             Save
                         </button>
                     </div>
@@ -24,7 +24,6 @@ export default function Write() {
                         return (
                             <div className="py-3 px-5 shadow-sm break-words" key={i.toString()}>
                                 <p className="p-2 pl-4 text-2xl dark:text-white',">{outlineContent.outline}</p>
-                                <p className="font-light">{outlineContent.content}</p>
                                 <Editor idx={i} />
                             </div>
                         );

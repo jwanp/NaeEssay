@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-
+import { EditorState } from 'lexical';
 interface Outline {
     outline: string;
     content: string;
@@ -19,9 +19,8 @@ const initialState: Essay = {
     date: '2024-09-16',
     content: [
         {
-            outline: '1. outline',
-            content:
-                '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}',
+            outline: 'Outline',
+            content: '',
         },
     ],
     public: false,

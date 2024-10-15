@@ -22,7 +22,7 @@ export default function SideBar() {
             <div className="flex border-b border-b-gray-300 p-3  ">
                 <p className="text-gray-500 border-white flex-1">Outline Topics</p>
                 <button
-                    className="bg-blue-400 px-2 rounded-md text-sm text-white font-light hover:bg-blue-300 duration-200"
+                    className="bg-gray-400 px-2 rounded-md text-sm text-white font-light hover:bg-gray-300 duration-200"
                     onClick={() => {
                         if (editTopic == Edit.None) {
                             setEditTopic(Edit.Delete);
@@ -42,7 +42,7 @@ export default function SideBar() {
                         <li className="flex mb-2" key={i}>
                             {editTopic == Edit.Delete && (
                                 <button
-                                    className="flex items-center p-2 bg-blue-400 rounded-s-md shadow-md text-white hover:bg-blue-300"
+                                    className="flex items-center p-2 bg-green-400 rounded-s-md shadow-md text-white hover:bg-green-300"
                                     onClick={() => {
                                         dispatch(deleteOutline({ idx: i }));
                                     }}>
@@ -50,7 +50,7 @@ export default function SideBar() {
                                 </button>
                             )}
                             {editTopic == Edit.ReArrange && (
-                                <button className="flex items-center p-2 bg-blue-400 rounded-s-md shadow-md text-white hover:bg-blue-300">
+                                <button className="flex items-center p-2 bg-green-400 rounded-s-md shadow-md text-white hover:bg-gren-300">
                                     <RxHamburgerMenu></RxHamburgerMenu>
                                 </button>
                             )}
@@ -72,7 +72,7 @@ export default function SideBar() {
                 })}
 
                 <button
-                    className="w-full bg-blue-400 text-white p-1 hover:bg-blue-300 duration-300"
+                    className="w-full bg-green-400 text-white p-1 hover:bg-green-300 duration-300"
                     onClick={() => {
                         dispatch(addOutline());
                     }}>
