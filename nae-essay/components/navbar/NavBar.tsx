@@ -2,11 +2,15 @@
 import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
+import { signIn, signOut } from 'next-auth/react';
+
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { openNav } from './navSlice';
+import { getServerSession } from 'next-auth';
+import { Session } from 'next-auth';
 
-export default function NavBar() {
-    // const dispatch = useAppDispatch();
+export default function NavBar({ session }: { session: Session | null }) {
+    // const dispatch = useAppDispatch();null
     // const isOpen = useAppSelector((state) => state.navOpen.isOpen);
     useEffect(() => {
         let isOpen: HTMLInputElement = document.getElementById('isOpen') as HTMLInputElement;
@@ -38,11 +42,23 @@ export default function NavBar() {
                     <Link href="/posts" className="px-5 hover:text-green-600 transition duration-300 pt-1">
                         Posts
                     </Link>
-                    <Link
-                        href="/signin"
-                        className="mx-5 px-4 py-1 text-white text-center bg-green-400 hover:bg-green-300 transition duration-300 rounded-sm">
-                        Sign in
-                    </Link>
+                    {session ? (
+                        <button
+                            onClick={() => {
+                                signOut();
+                            }}
+                            className="mx-5 px-4 py-1 text-white text-center bg-red-400 hover:bg-red-300 transition duration-300 rounded-sm">
+                            Sign out
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => {
+                                signIn();
+                            }}
+                            className="mx-5 px-4 py-1 text-white text-center bg-green-400 hover:bg-green-300 transition duration-300 rounded-sm">
+                            Sign in
+                        </button>
+                    )}
                 </div>
                 <div className="flex items-center justify-center md:hidden hover:bg-gray-200  h-9 w-9  rounded-sm">
                     <label className="flex flex-col items-center justify-center gap-1 cursor-pointer">

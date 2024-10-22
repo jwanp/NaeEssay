@@ -20,7 +20,7 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin';
 
-import { validateUrl } from '@/lib/utils';
+import { validateUrl } from '@/utils/editor';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { changeContent } from '@/lib/features/essay/essaySlice';
