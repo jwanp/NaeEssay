@@ -3,9 +3,9 @@ import { connectDB } from '@/utils/database';
 import { ObjectId } from 'mongodb';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
-import { Session } from 'next-auth';
+
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
-    let session: Session | null = await getServerSession(request, response, authOptions);
+    let session = await getServerSession(request, response, authOptions);
     let db = (await connectDB).db('nae-essay');
     try {
         // user 가 다르다면 return

@@ -15,28 +15,44 @@ Topic
 이므로 
 request.body:
     title: str
-    public: boolean
+    is_public: boolean
 */
+interface Topic {
+    title: string;
+    date: Date;
+    author: string | null | undefined;
+    authorName: string | null | undefined;
+    is_public: string;
+}
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
     let session = await getServerSession(request, response, authOptions);
+    let requestBody: Topic | null = null;
     if (session) {
-        request.body.author = session.user?.email;
-        request.body.authorName = session.user?.name;
-        request.body.date = new Date();
-        console.log(session.user);
+        requestBody = {
+            title: request.body.title,
+            is_public: request.body.is_public,
+            author: session.user?.email,
+            authorName: session.user?.name,
+            date: new Date(),
+        };
+    } else {
+        return response.status(500).json('로그인 하지 않았습니다.');
     }
-
     if (request.method == 'POST') {
-        if (request.body.title == '') {
-            return response.status(500).json('제목을 입력 하지 않았습니다.');
+        if (request.body.title == '' || request.body.title == null) {
+            response.status(500).json('제목을 입력 하지 않았습니다.');
         }
-        try {
-            let db = (await connectDB).db('nae-essay');
-            let result = db.collection('topic').insertOne(request.body);
-            response.redirect(302, '/list');
-        } catch (error) {
-            response.json('DB 에러 발생');
+        if (requestBody) {
+            try {
+                let db = (await connectDB).db('nae-essay');
+                let result = db.collection('topic').insertOne({ requestBody });
+                response.redirect(302, '/topics');
+            } catch (error) {
+                response.json('DB 에러 발생');
+            }
         }
+    } else {
+        response.status(500).json('post 요청만 가능합니다.');
     }
 }
