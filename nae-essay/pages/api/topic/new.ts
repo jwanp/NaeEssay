@@ -29,6 +29,11 @@ export default async function handler(request: NextApiRequest, response: NextApi
     let session = await getServerSession(request, response, authOptions);
     let requestBody: Topic | null = null;
     if (session) {
+        if (request.body.is_public == 'on') {
+            request.body.is_public = true;
+        } else {
+            request.body.is_public = false;
+        }
         requestBody = {
             title: request.body.title,
             is_public: request.body.is_public,
@@ -41,7 +46,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
     }
     if (request.method == 'POST') {
         if (request.body.title == '' || request.body.title == null) {
-            response.status(500).json('제목을 입력 하지 않았습니다.');
+            return response.status(500).json('제목을 입력 하지 않았습니다.');
         }
         if (requestBody) {
             try {

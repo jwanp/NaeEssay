@@ -22,17 +22,17 @@ export default function Example() {
     return (
         <div className="mx-auto w-[120px] ">
             <Combobox value={selected} onChange={(value) => setSelected(value)}>
-                <div className="relative">
+                <div className="relative ">
                     <ComboboxInput
                         readOnly
                         className={clsx(
-                            'border-gray-400 bg-gray-200 h-[48px] w-full py-1.5 pr-8 pl-3 text-sm/6 text-gray-700',
+                            'rounded-md text-center data-[focus]:border  border-green-400 bg-gray-200 h-[48px] w-full py-1.5 pr-8 pl-3 text-sm  text-green-600',
                             'focus:outline-none '
                         )}
                         displayValue={(sort: sortType) => sort?.name}
                     />
                     <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
-                        <ChevronDownIcon className="size-4 fill-black/60 group-data-[hover]:fill-black" />
+                        <ChevronDownIcon className="size-4 group-data-[hover]:fill-green-500" />
                     </ComboboxButton>
                 </div>
 
@@ -40,7 +40,7 @@ export default function Example() {
                     anchor="bottom"
                     transition
                     className={clsx(
-                        'rounded-b-md w-[var(--input-width)]  border border-white bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
+                        'border  border-green-400  border-t-0 rounded-b-md w-[var(--input-width)] bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
                         'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
                     )}>
                     {sorts.map((sort) => (
@@ -48,7 +48,7 @@ export default function Example() {
                             key={sort.id}
                             value={sort}
                             className="group flex cursor-default items-center gap-2  py-1.5 px-3 select-none data-[focus]:bg-white/10">
-                            <CheckIcon className="invisible size-4 fill-black group-data-[selected]:visible" />
+                            <CheckIcon className=" invisible size-4 fill-green-500 group-data-[selected]:visible" />
                             <div className="text-sm/6 text-black">{sort.name}</div>
                         </ComboboxOption>
                     ))}
