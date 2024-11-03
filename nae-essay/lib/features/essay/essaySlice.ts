@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { EditorState } from 'lexical';
+import { EssayType, EssayContentType } from '@/lib/definitions';
 interface Outline {
     outline: string;
     content: string;

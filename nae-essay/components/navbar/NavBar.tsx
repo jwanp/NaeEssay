@@ -40,7 +40,7 @@ export default function NavBar({ session }: { session: Session | null }) {
                         QnA
                     </Link>
                     <Link href="/posts" className="px-5 hover:text-green-600 transition duration-300 pt-1">
-                        Posts
+                        My page
                     </Link>
                     {session ? (
                         <button

@@ -12,15 +12,15 @@ type sortType = {
 
 const sorts: sortType[] = [
     { id: 1, name: '최신순' },
-    { id: 2, name: '에세이' },
-    { id: 3, name: '북마크' },
+    { id: 2, name: '댓글수' },
+    { id: 3, name: '좋아요' },
 ];
 
-export default function TopicDropDown() {
+export default function EssayDropDown() {
     const [selected, setSelected] = useState<sortType | null>(sorts[1]);
 
     return (
-        <div className="mx-auto w-[120px] ">
+        <div className="w-[120px] ">
             <Combobox value={selected} onChange={(value) => setSelected(value)}>
                 <div className="relative ">
                     <ComboboxInput

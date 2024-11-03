@@ -1,15 +1,24 @@
-import { TopicType } from '@/lib/definitions';
-import TopicSearch from '../Search/TopicSearch';
+import { EssayType } from '@/lib/definitions';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { DocumentIcon, FilledDocumentIcon, BookmarkIcon, FilledBookmarkIcon, PreviousIcon, NextIcon } from './Icons';
+import {
+    DocumentIcon,
+    FilledDocumentIcon,
+    BookmarkIcon,
+    FilledBookmarkIcon,
+    PreviousIcon,
+    NextIcon,
+    LikeIcon,
+    CommentIcon,
+} from './Icons';
+import EssaySearch from '../Search/EssaySearch';
 
-export default function TopicTable({ topics }: { topics: TopicType[] }): React.ReactElement {
+export default function EssayTable({ essays }: { essays: EssayType[] }): React.ReactElement {
     const [currentPage, setCurrentPage] = useState(0);
     const [pageRange, setPageRange] = useState({ startPage: 0, endPage: 4 });
 
     const rowsPerPage: number = 15;
-    const totalPages = Math.ceil(topics.length / rowsPerPage);
+    const totalPages = Math.ceil(essays.length / rowsPerPage);
     const handlePrevious = () => {
         if (currentPage > 0) setCurrentPage(currentPage - 1);
     };
@@ -30,64 +39,66 @@ export default function TopicTable({ topics }: { topics: TopicType[] }): React.R
 
     return (
         <div className="max-w-[1200px] bg-white rounded-sm">
-            <div className=" px-[20px] hidden md:flex w-full text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
+            <div className=" px-[20px] hidden md:flex w-full   text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
                 <div className="mr-4 content-center flex-1 font-medium text-base ">주제</div>
                 <div className="mr-4 content-center w-[160px] font-medium text-base">저자</div>
                 <div className="mr-4 content-center w-[105px] font-medium text-base">날짜</div>
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
-                {topics.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((topic, idx) => {
+                {essays.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((essay, idx) => {
                     return (
                         <div>
                             {/* 전체 사이즈 */}
                             <div
-                                className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] "
-                                key={topic.id}>
-                                <Link
-                                    href={'topics/' + topic.id}
-                                    className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
-                                    <div className="truncate max-w-full">{topic.title}</div>
+                                className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] "
+                                key={essay.id}>
+                                <Link href={'essay/' + essay.id} className="mr-4 content-center flex-1 min-w-0">
+                                    <h4 className="truncate max-w-full font-normal text-base  text-black">
+                                        {essay.content[0].outline}
+                                    </h4>
+                                    <p className="truncate max-w-full text-[13px]">{essay.content[0].content}</p>
                                 </Link>
                                 <div className="min-w-0 mr-4 content-center w-[160px]">
-                                    <div className="truncate max-w-full">{topic.author}</div>
+                                    <div className="truncate max-w-full">{essay.author}</div>
                                 </div>
                                 <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {topic.date}
+                                    {essay.date}
                                 </div>
                                 <div className="content-center flex gap-5 w-[200px] text-[14px]">
-                                    <div className="flex  content-center">
-                                        <DocumentIcon />
-                                        <div className="ml-[6px] content-center">{topic.essays}</div>
+                                    <div className="flex content-center">
+                                        <CommentIcon />
+                                        <div className="ml-[6px] content-center">{essay.comments}</div>
                                     </div>
                                     <div className="flex content-center">
-                                        <BookmarkIcon />
-                                        <div className="ml-[6px] content-center">{topic.bookmarks}</div>
+                                        <LikeIcon />
+                                        <div className="ml-[6px] content-center">{essay.likes}</div>
                                     </div>
                                 </div>
                             </div>
                             {/* 테블릿 이하 사이즈 */}
                             <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
                                 <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {topic.date}
+                                    {essay.date}
                                 </div>
-                                <Link
-                                    href={'topics/' + topic.id}
-                                    className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
-                                    <div className="truncate max-w-full">{topic.title}</div>
+                                <Link href={'essay/' + essay.id} className="mr-4 content-center flex-1 min-w-0">
+                                    <h4 className="truncate max-w-full font-normal text-base  text-black">
+                                        {essay.content[0].outline}
+                                    </h4>
+                                    <p className="truncate max-w-full text-[13px]">{essay.content[0].content}</p>
                                 </Link>
                                 <div className="flex justify-between">
                                     <div className="min-w-0 mr-4 content-center w-[160px]">
-                                        <div className="truncate max-w-full">{topic.author}</div>
+                                        <div className="truncate max-w-full">{essay.author}</div>
                                     </div>
                                     <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
-                                        <div className="flex  content-center">
-                                            <DocumentIcon />
-                                            <div className="ml-[6px] content-center">{topic.essays}</div>
+                                        <div className="flex content-center">
+                                            <CommentIcon />
+                                            <div className="ml-[6px] content-center">{essay.comments}</div>
                                         </div>
                                         <div className="flex content-center">
-                                            <BookmarkIcon />
-                                            <div className="ml-[6px] content-center">{topic.bookmarks}</div>
+                                            <LikeIcon />
+                                            <div className="ml-[6px] content-center">{essay.likes}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +158,7 @@ export default function TopicTable({ topics }: { topics: TopicType[] }): React.R
                     </ul>
                 </nav>
             </div>
-            <TopicSearch />
+            <EssaySearch />
         </div>
     );
 }

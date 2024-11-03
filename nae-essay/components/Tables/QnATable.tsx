@@ -1,15 +1,15 @@
-import { TopicType } from '@/lib/definitions';
-import TopicSearch from '../Search/TopicSearch';
+import { QnAType } from '@/lib/definitions';
+import QnASearch from '../Search/QnASearch';
+import { PreviousIcon, NextIcon, CommentIcon, FilledCommentIcon, LikeIcon, FilledLikeIcon } from './Icons';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { DocumentIcon, FilledDocumentIcon, BookmarkIcon, FilledBookmarkIcon, PreviousIcon, NextIcon } from './Icons';
 
-export default function TopicTable({ topics }: { topics: TopicType[] }): React.ReactElement {
+export default function QnATable({ qnas }: { qnas: QnAType[] }): React.ReactElement {
     const [currentPage, setCurrentPage] = useState(0);
     const [pageRange, setPageRange] = useState({ startPage: 0, endPage: 4 });
 
     const rowsPerPage: number = 15;
-    const totalPages = Math.ceil(topics.length / rowsPerPage);
+    const totalPages = Math.ceil(qnas.length / rowsPerPage);
     const handlePrevious = () => {
         if (currentPage > 0) setCurrentPage(currentPage - 1);
     };
@@ -30,64 +30,64 @@ export default function TopicTable({ topics }: { topics: TopicType[] }): React.R
 
     return (
         <div className="max-w-[1200px] bg-white rounded-sm">
-            <div className=" px-[20px] hidden md:flex w-full text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
-                <div className="mr-4 content-center flex-1 font-medium text-base ">주제</div>
+            <div className=" px-[20px] hidden md:flex w-full   text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
+                <div className="mr-4 content-center flex-1 font-medium text-base ">제목</div>
                 <div className="mr-4 content-center w-[160px] font-medium text-base">저자</div>
                 <div className="mr-4 content-center w-[105px] font-medium text-base">날짜</div>
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
-                {topics.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((topic, idx) => {
+                {qnas.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((qna, idx) => {
                     return (
                         <div>
-                            {/* 전체 사이즈 */}
+                            {/* 전체사이즈 */}
                             <div
-                                className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] "
-                                key={topic.id}>
+                                className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] "
+                                key={qna.id}>
                                 <Link
-                                    href={'topics/' + topic.id}
-                                    className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
-                                    <div className="truncate max-w-full">{topic.title}</div>
+                                    href={'qna/' + qna.id}
+                                    className=" min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
+                                    <div className="truncate max-w-full">{qna.title}</div>
                                 </Link>
                                 <div className="min-w-0 mr-4 content-center w-[160px]">
-                                    <div className="truncate max-w-full">{topic.author}</div>
+                                    <div className="truncate max-w-full">{qna.author}</div>
                                 </div>
                                 <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {topic.date}
+                                    {qna.date}
                                 </div>
                                 <div className="content-center flex gap-5 w-[200px] text-[14px]">
                                     <div className="flex  content-center">
-                                        <DocumentIcon />
-                                        <div className="ml-[6px] content-center">{topic.essays}</div>
+                                        <CommentIcon />
+                                        <div className="ml-[6px] content-center">{qna.comments}</div>
                                     </div>
                                     <div className="flex content-center">
-                                        <BookmarkIcon />
-                                        <div className="ml-[6px] content-center">{topic.bookmarks}</div>
+                                        <LikeIcon />
+                                        <div className="ml-[6px] content-center">{qna.likes}</div>
                                     </div>
                                 </div>
                             </div>
                             {/* 테블릿 이하 사이즈 */}
                             <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
                                 <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {topic.date}
+                                    {qna.date}
                                 </div>
                                 <Link
-                                    href={'topics/' + topic.id}
-                                    className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
-                                    <div className="truncate max-w-full">{topic.title}</div>
+                                    href={'qna/' + qna.id}
+                                    className=" min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
+                                    <div className="truncate max-w-full">{qna.title}</div>
                                 </Link>
                                 <div className="flex justify-between">
                                     <div className="min-w-0 mr-4 content-center w-[160px]">
-                                        <div className="truncate max-w-full">{topic.author}</div>
+                                        <div className="truncate max-w-full">{qna.author}</div>
                                     </div>
-                                    <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
+                                    <div className="content-center justify-end flex gap-5 w-[200px] text-[14px]">
                                         <div className="flex  content-center">
-                                            <DocumentIcon />
-                                            <div className="ml-[6px] content-center">{topic.essays}</div>
+                                            <CommentIcon />
+                                            <div className="ml-[6px] content-center">{qna.comments}</div>
                                         </div>
                                         <div className="flex content-center">
-                                            <BookmarkIcon />
-                                            <div className="ml-[6px] content-center">{topic.bookmarks}</div>
+                                            <LikeIcon />
+                                            <div className="ml-[6px] content-center">{qna.likes}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@ export default function TopicTable({ topics }: { topics: TopicType[] }): React.R
                     </ul>
                 </nav>
             </div>
-            <TopicSearch />
+            <QnASearch />
         </div>
     );
 }

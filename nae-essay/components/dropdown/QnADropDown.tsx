@@ -12,11 +12,11 @@ type sortType = {
 
 const sorts: sortType[] = [
     { id: 1, name: '최신순' },
-    { id: 2, name: '에세이' },
-    { id: 3, name: '북마크' },
+    { id: 2, name: '댓글순' },
+    { id: 3, name: '좋아요' },
 ];
 
-export default function TopicDropDown() {
+export default function QnADropDown() {
     const [selected, setSelected] = useState<sortType | null>(sorts[1]);
 
     return (
