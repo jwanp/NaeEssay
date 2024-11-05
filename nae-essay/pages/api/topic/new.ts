@@ -28,6 +28,7 @@ interface Topic {
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
     let session = await getServerSession(request, response, authOptions);
     let requestBody: Topic | null = null;
+
     if (session) {
         if (request.body.is_public == 'on') {
             request.body.is_public = true;
@@ -42,22 +43,22 @@ export default async function handler(request: NextApiRequest, response: NextApi
             date: new Date(),
         };
     } else {
-        return response.status(500).json('로그인 하지 않았습니다.');
+        return response.status(500).json({ message: '로그인 하지 않았습니다.' });
     }
     if (request.method == 'POST') {
         if (request.body.title == '' || request.body.title == null) {
-            return response.status(500).json('제목을 입력 하지 않았습니다.');
+            return response.status(500).json({ message: '제목을 입력 하지 않았습니다.' });
         }
         if (requestBody) {
             try {
                 let db = (await connectDB).db('nae-essay');
-                let result = db.collection('topic').insertOne({ requestBody });
-                response.redirect(302, '/topics');
+                let result = db.collection('topic').insertOne({ ...requestBody });
+                return response.status(200).json({ message: '주제 생성 성공' });
             } catch (error) {
-                response.json('DB 에러 발생');
+                return response.status(500).json({ message: 'DB 에러 발생' });
             }
         }
     } else {
-        response.status(500).json('post 요청만 가능합니다.');
+        response.status(500).json({ message: 'post 요청만 가능합니다.' });
     }
 }

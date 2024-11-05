@@ -1,10 +1,13 @@
+'use client';
+
 import { TopicType } from '@/lib/definitions';
 import TopicSearch from '../Search/TopicSearch';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { DocumentIcon, FilledDocumentIcon, BookmarkIcon, FilledBookmarkIcon, PreviousIcon, NextIcon } from './Icons';
 
-export default function TopicTable({ topics }: { topics: TopicType[] }): React.ReactElement {
+export default function TopicTable() {
+    const topics: TopicType[] = [];
     const [currentPage, setCurrentPage] = useState(0);
     const [pageRange, setPageRange] = useState({ startPage: 0, endPage: 4 });
 
@@ -39,11 +42,9 @@ export default function TopicTable({ topics }: { topics: TopicType[] }): React.R
             <div>
                 {topics.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((topic, idx) => {
                     return (
-                        <div>
+                        <div key={topic.id}>
                             {/* 전체 사이즈 */}
-                            <div
-                                className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] "
-                                key={topic.id}>
+                            <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                                 <Link
                                     href={'topics/' + topic.id}
                                     className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">

@@ -1,10 +1,13 @@
+'use client';
+
 import { QnAType } from '@/lib/definitions';
 import QnASearch from '../Search/QnASearch';
 import { PreviousIcon, NextIcon, CommentIcon, FilledCommentIcon, LikeIcon, FilledLikeIcon } from './Icons';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function QnATable({ qnas }: { qnas: QnAType[] }): React.ReactElement {
+export default function QnATable(): React.ReactElement {
+    const qnas: QnAType[] = [];
     const [currentPage, setCurrentPage] = useState(0);
     const [pageRange, setPageRange] = useState({ startPage: 0, endPage: 4 });
 
@@ -39,11 +42,9 @@ export default function QnATable({ qnas }: { qnas: QnAType[] }): React.ReactElem
             <div>
                 {qnas.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((qna, idx) => {
                     return (
-                        <div>
+                        <div key={qna.id}>
                             {/* 전체사이즈 */}
-                            <div
-                                className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] "
-                                key={qna.id}>
+                            <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                                 <Link
                                     href={'qna/' + qna.id}
                                     className=" min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">

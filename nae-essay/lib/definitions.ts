@@ -16,9 +16,9 @@ export interface TopicType {
     title: string;
     author: string;
     date: string;
-    essays: number;
     bookmarks: number;
-    public: boolean;
+    essays: number;
+    is_public: boolean;
 }
 
 export interface QnAType {

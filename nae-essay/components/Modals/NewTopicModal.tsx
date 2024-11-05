@@ -2,8 +2,19 @@
 'use client';
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+
+import { useState, FormEvent } from 'react';
+import toast, { toastConfig } from 'react-simple-toasts';
+import 'react-simple-toasts/dist/style.css';
+import 'react-simple-toasts/dist/theme/failure.css';
+import 'react-simple-toasts/dist/theme/success.css';
+toastConfig({
+    theme: 'failure',
+    duration: 5000,
+    position: 'top-right',
+    clickClosable: true,
+    maxVisibleToasts: 3,
+});
 
 interface NewTopicModalProps {
     isOpen: boolean;
@@ -16,6 +27,47 @@ export default function NewTopicModal({ isOpen, onClose }: NewTopicModalProps) {
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsChecked(event.target.checked); // Update state based on checkbox status
     };
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const data = {
+            title: formData.get('title') as string,
+            is_public: isChecked, // assuming `is_public` is a checkbox or select
+        };
+
+        try {
+            // Send a POST request with the form data
+            const response = await fetch('/api/topic/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            // Process the response
+            const resultData: { message: string } = await response.json();
+            if (response.ok) {
+                // setResult(`Success: ${data.message}`);
+                toast(resultData.message, { theme: 'success' });
+                onClose();
+            } else {
+                // setResult(`Error: ${data.message || 'Something went wrong'}`);
+                toast(resultData.message);
+            }
+        } catch (error: unknown) {
+            // setResult(`Error: ${(error as Error).message}`);
+            if (error instanceof Error) {
+                // Access the message property safely
+                toast(error.message);
+            } else {
+                // Fallback message for unknown errors
+                toast('에러 발생');
+            }
+        }
+    };
     return (
         <Dialog open={isOpen} onClose={onClose} className="relative z-10">
             <DialogBackdrop
@@ -24,10 +76,10 @@ export default function NewTopicModal({ isOpen, onClose }: NewTopicModalProps) {
             />
 
             <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div className="flex min-h-full  justify-center p-4 text-center items-center sm:p-0">
                     <DialogPanel
                         transition
-                        className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95">
+                        className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95">
                         <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                             <div className="sm:flex sm:items-start justify-between">
                                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
@@ -53,7 +105,7 @@ export default function NewTopicModal({ isOpen, onClose }: NewTopicModalProps) {
                             </div>
                         </div>
                         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                            <form className="w-full" method="POST" action="/api/topic/new">
+                            <form onSubmit={handleSubmit} className="w-full" method="POST" action="/api/topic/new">
                                 <div className="flex items-center border-b border-teal-500 py-2">
                                     <input
                                         name="title"
@@ -62,11 +114,7 @@ export default function NewTopicModal({ isOpen, onClose }: NewTopicModalProps) {
                                         placeholder="Topic"
                                         aria-label="Full name"
                                     />
-                                    <input
-                                        className="hidden"
-                                        name="is_public"
-                                        type="checkbox"
-                                        checked={isChecked}></input>
+
                                     <button
                                         className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
                                         type="submit">
