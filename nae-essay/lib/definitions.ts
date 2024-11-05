@@ -12,13 +12,15 @@ export interface OnChangePluginProps {
 }
 
 export interface TopicType {
-    id: string;
+    _id: string;
     title: string;
     author: string;
     date: string;
-    bookmarks: number;
-    essays: number;
+    bookmarks: unknown;
+    essays: unknown;
     is_public: boolean;
+    bookmarkCount: number;
+    essayCount: number;
 }
 
 export interface QnAType {
@@ -26,8 +28,10 @@ export interface QnAType {
     title: string;
     author: string;
     date: string;
-    comments: number;
-    likes: number;
+    comments: unknown;
+    likes: unknown;
+    commentCount: number;
+    likeCount: number;
 }
 
 export interface EssayContentType {
@@ -38,10 +42,13 @@ export interface EssayContentType {
 export interface EssayType {
     id: string;
     topic: string;
+    topicId: string;
     author: string;
     date: string;
     content: EssayContentType[];
     public: boolean;
-    comments: number;
-    likes: number;
+    comments: unknown;
+    likes: unknown;
+    commentCount: number;
+    likeCount: number;
 }

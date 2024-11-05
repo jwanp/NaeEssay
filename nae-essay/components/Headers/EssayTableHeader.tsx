@@ -2,16 +2,17 @@
 
 import { EssayType } from '@/lib/definitions';
 import EssayDropDown from '@/components/dropdown/EssayDropDown';
-
-export default function EssayTableHeader({ id }: { id: string }) {
+import { useAppSelector } from '@/lib/hooks';
+export default function EssayTableHeader({ topic }: { topic: string }) {
+    const essayCount = useAppSelector((state) => state.essaySort.totalCount);
     return (
         <>
             <div className="flex justify-between px-[40px] py-[20px] ">
                 <div className="flex items-center mr-5">
-                    {/* <h1 className=" font-medium text-xl ">{topic}</h1> */}
-                    {/* <h4 className="hidden md:block shrink-0 font-medium text-base ml-6 text-green-600">
-                        {essaysCount}개 에세이
-                    </h4> */}
+                    <h1 className=" font-medium text-xl ">{topic}</h1>
+                    <h4 className="hidden md:block shrink-0 font-medium text-base ml-6 text-green-600">
+                        {essayCount}개 에세이
+                    </h4>
                 </div>
 
                 <div className="hidden md:flex items-center">
@@ -23,7 +24,7 @@ export default function EssayTableHeader({ id }: { id: string }) {
                 </div>
             </div>
             <div className="md:hidden flex justify-between items-center px-[40px] ">
-                {/* <h4 className="shrink-0 font-medium text-base text-green-600">{essaysCount}개 에세이</h4> */}
+                <h4 className="shrink-0 font-medium text-base text-green-600">{essayCount}개 에세이</h4>
                 <EssayDropDown />
             </div>
             <div className="px-4 md:hidden py-[20px]">

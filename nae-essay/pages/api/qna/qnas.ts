@@ -47,33 +47,51 @@ export default function TopicList({ sortBy }) {
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
     try {
         let db = (await connectDB).db('nae-essay');
-        const { sortBy = 'date' } = request.query;
+
+        // sortBy default value is date
+        const { sortBy = 'date', limit = '1000' } = request.query;
 
         const topics = await db
             .collection('qna')
             .aggregate([
                 {
                     $lookup: {
-                        from: 'likes',
+                        from: 'qna_like',
                         localField: '_id',
-                        foreignField: 'topicId',
-                        as: 'bookmark',
+                        foreignField: 'qnaId',
+                        as: 'like',
                     },
                 },
                 {
                     $addFields: {
-                        bookmarkCount: { $size: '$likes' },
+                        likeCount: { $size: '$like' },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'qna_comment',
+                        localField: '_id',
+                        foreignField: 'qnaId',
+                        as: 'comment',
+                    },
+                },
+                {
+                    $addFields: {
+                        commentCount: { $size: '$comment' },
                     },
                 },
                 {
                     $sort: {
-                        ...(sortBy === 'likes' ? { bookmarkCount: -1 } : { date: -1 }),
+                        ...(sortBy === 'comments' ? { commentCount: -1 } : {}),
+                        ...(sortBy === 'likes' ? { likeCount: -1 } : {}),
+                        ...(sortBy === 'date' ? { date: -1 } : {}),
                     },
                 },
             ])
             .toArray();
+        const limitedQnas = topics.slice(0, parseInt(limit as string, 10));
 
-        response.status(200).json(topics);
+        return response.status(200).json(limitedQnas);
     } catch {
         return response.status(500).json('db 연결중 에러가 발생했습니다.');
     }

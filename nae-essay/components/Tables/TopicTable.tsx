@@ -6,8 +6,33 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { DocumentIcon, FilledDocumentIcon, BookmarkIcon, FilledBookmarkIcon, PreviousIcon, NextIcon } from './Icons';
 
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { getDatePrintFormat } from '@/utils/string';
+import { changeTopicCount } from '@/lib/features/sort/SortSlice';
+
 export default function TopicTable() {
-    const topics: TopicType[] = [];
+    const dispatch = useAppDispatch();
+    // 데이터 불러오기
+    const topicSort = useAppSelector((state) => state.topicSort.name);
+    const limit = 100;
+    const [topics, setTopics] = useState<TopicType[]>([]);
+
+    const fetchTopics = async () => {
+        try {
+            const response = await fetch(`/api/topic/topics?sortBy=${topicSort}&limit=${limit}`);
+            const data = await response.json();
+            setTopics(data);
+            dispatch(changeTopicCount({ value: data.length }));
+        } catch (error) {
+            console.error('Error fetching topics:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchTopics();
+    }, [topicSort, limit]);
+
+    // 페이지 번호 조정
     const [currentPage, setCurrentPage] = useState(0);
     const [pageRange, setPageRange] = useState({ startPage: 0, endPage: 4 });
 
@@ -35,60 +60,60 @@ export default function TopicTable() {
         <div className="max-w-[1200px] bg-white rounded-sm">
             <div className=" px-[20px] hidden md:flex w-full text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
                 <div className="mr-4 content-center flex-1 font-medium text-base ">주제</div>
-                <div className="mr-4 content-center w-[160px] font-medium text-base">저자</div>
+                <div className="mr-4 content-center w-[180px] font-medium text-base">저자</div>
                 <div className="mr-4 content-center w-[105px] font-medium text-base">날짜</div>
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
                 {topics.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((topic, idx) => {
                     return (
-                        <div key={topic.id}>
+                        <div key={topic._id}>
                             {/* 전체 사이즈 */}
                             <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                                 <Link
-                                    href={'topics/' + topic.id}
+                                    href={'topics/' + topic._id}
                                     className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                     <div className="truncate max-w-full">{topic.title}</div>
                                 </Link>
-                                <div className="min-w-0 mr-4 content-center w-[160px]">
+                                <div className="min-w-0 mr-4 content-center w-[180px]">
                                     <div className="truncate max-w-full">{topic.author}</div>
                                 </div>
                                 <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {topic.date}
+                                    {getDatePrintFormat(topic.date)}
                                 </div>
                                 <div className="content-center flex gap-5 w-[200px] text-[14px]">
                                     <div className="flex  content-center">
                                         <DocumentIcon />
-                                        <div className="ml-[6px] content-center">{topic.essays}</div>
+                                        <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                     </div>
                                     <div className="flex content-center">
                                         <BookmarkIcon />
-                                        <div className="ml-[6px] content-center">{topic.bookmarks}</div>
+                                        <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
                                     </div>
                                 </div>
                             </div>
                             {/* 테블릿 이하 사이즈 */}
                             <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
                                 <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {topic.date}
+                                    {getDatePrintFormat(topic.date)}
                                 </div>
                                 <Link
-                                    href={'topics/' + topic.id}
+                                    href={'topics/' + topic._id}
                                     className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                     <div className="truncate max-w-full">{topic.title}</div>
                                 </Link>
                                 <div className="flex justify-between">
-                                    <div className="min-w-0 mr-4 content-center w-[160px]">
+                                    <div className="min-w-0 mr-4 content-center w-[180px]">
                                         <div className="truncate max-w-full">{topic.author}</div>
                                     </div>
                                     <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
                                         <div className="flex  content-center">
                                             <DocumentIcon />
-                                            <div className="ml-[6px] content-center">{topic.essays}</div>
+                                            <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                         </div>
                                         <div className="flex content-center">
                                             <BookmarkIcon />
-                                            <div className="ml-[6px] content-center">{topic.bookmarks}</div>
+                                            <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
                                         </div>
                                     </div>
                                 </div>

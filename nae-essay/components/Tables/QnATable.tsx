@@ -6,8 +6,33 @@ import { PreviousIcon, NextIcon, CommentIcon, FilledCommentIcon, LikeIcon, Fille
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { changeQnaCount } from '@/lib/features/sort/SortSlice';
+
 export default function QnATable(): React.ReactElement {
-    const qnas: QnAType[] = [];
+    const dispatch = useAppDispatch();
+
+    // 데이터 불러오기
+    const qnaSort = useAppSelector((state) => state.qnaSort.name);
+    const limit = 100;
+    const [qnas, setQnas] = useState<QnAType[]>([]);
+
+    const fetchTopics = async () => {
+        try {
+            const response = await fetch(`/api/qna/qnas?sortBy=${qnaSort}&limit=${limit}`);
+            const data = await response.json();
+            setQnas(data);
+            dispatch(changeQnaCount({ value: data.length }));
+        } catch (error) {
+            console.error('Error fetching qnas:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchTopics();
+    }, [qnaSort, limit]);
+
+    // 페이지 번호 조정
     const [currentPage, setCurrentPage] = useState(0);
     const [pageRange, setPageRange] = useState({ startPage: 0, endPage: 4 });
 
@@ -40,62 +65,68 @@ export default function QnATable(): React.ReactElement {
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
-                {qnas.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((qna, idx) => {
-                    return (
-                        <div key={qna.id}>
-                            {/* 전체사이즈 */}
-                            <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
-                                <Link
-                                    href={'qna/' + qna.id}
-                                    className=" min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
-                                    <div className="truncate max-w-full">{qna.title}</div>
-                                </Link>
-                                <div className="min-w-0 mr-4 content-center w-[160px]">
-                                    <div className="truncate max-w-full">{qna.author}</div>
-                                </div>
-                                <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {qna.date}
-                                </div>
-                                <div className="content-center flex gap-5 w-[200px] text-[14px]">
-                                    <div className="flex  content-center">
-                                        <CommentIcon />
-                                        <div className="ml-[6px] content-center">{qna.comments}</div>
-                                    </div>
-                                    <div className="flex content-center">
-                                        <LikeIcon />
-                                        <div className="ml-[6px] content-center">{qna.likes}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* 테블릿 이하 사이즈 */}
-                            <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
-                                <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {qna.date}
-                                </div>
-                                <Link
-                                    href={'qna/' + qna.id}
-                                    className=" min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
-                                    <div className="truncate max-w-full">{qna.title}</div>
-                                </Link>
-                                <div className="flex justify-between">
+                {qnas.length <= 0 ? (
+                    <div className="flex justify-center content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
+                        새로운 질문을 작성하세요
+                    </div>
+                ) : (
+                    qnas.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((qna, idx) => {
+                        return (
+                            <div key={qna.id}>
+                                {/* 전체사이즈 */}
+                                <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
+                                    <Link
+                                        href={'qna/' + qna.id}
+                                        className=" min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
+                                        <div className="truncate max-w-full">{qna.title}</div>
+                                    </Link>
                                     <div className="min-w-0 mr-4 content-center w-[160px]">
                                         <div className="truncate max-w-full">{qna.author}</div>
                                     </div>
-                                    <div className="content-center justify-end flex gap-5 w-[200px] text-[14px]">
+                                    <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
+                                        {qna.date}
+                                    </div>
+                                    <div className="content-center flex gap-5 w-[200px] text-[14px]">
                                         <div className="flex  content-center">
                                             <CommentIcon />
-                                            <div className="ml-[6px] content-center">{qna.comments}</div>
+                                            <div className="ml-[6px] content-center">{qna.commentCount}</div>
                                         </div>
                                         <div className="flex content-center">
                                             <LikeIcon />
-                                            <div className="ml-[6px] content-center">{qna.likes}</div>
+                                            <div className="ml-[6px] content-center">{qna.likeCount}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* 테블릿 이하 사이즈 */}
+                                <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
+                                    <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
+                                        {qna.date}
+                                    </div>
+                                    <Link
+                                        href={'qna/' + qna.id}
+                                        className=" min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
+                                        <div className="truncate max-w-full">{qna.title}</div>
+                                    </Link>
+                                    <div className="flex justify-between">
+                                        <div className="min-w-0 mr-4 content-center w-[160px]">
+                                            <div className="truncate max-w-full">{qna.author}</div>
+                                        </div>
+                                        <div className="content-center justify-end flex gap-5 w-[200px] text-[14px]">
+                                            <div className="flex  content-center">
+                                                <CommentIcon />
+                                                <div className="ml-[6px] content-center">{qna.commentCount}</div>
+                                            </div>
+                                            <div className="flex content-center">
+                                                <LikeIcon />
+                                                <div className="ml-[6px] content-center">{qna.likeCount}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })
+                )}
             </div>
             <div className="w-full flex justify-center h-[80px]">
                 <nav className="px-[8px] py-[16px]" aria-label="Page navigation example">

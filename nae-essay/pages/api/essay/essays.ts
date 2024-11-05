@@ -49,49 +49,57 @@ export default async function handler(request: NextApiRequest, response: NextApi
         let db = (await connectDB).db('nae-essay');
 
         // sortBy default value is date
-        const { sortBy = 'date', limit = '1000' } = request.query;
-
+        const { topicId = null, sortBy = 'date', limit = '1000' } = request.query;
+        if (topicId == null) {
+            return response.status(500).json('잘못된 요청 입니다.');
+        }
         const topics = await db
-            .collection('topic')
+            .collection('essay')
             .aggregate([
+                // Filter for essays with the matching topicId
                 {
-                    $lookup: {
-                        from: 'bookmark',
-                        localField: '_id',
-                        foreignField: 'topicId',
-                        as: 'bookmark',
-                    },
-                },
-                {
-                    $addFields: {
-                        bookmarkCount: { $size: '$bookmark' },
+                    $match: {
+                        topicId: topicId,
                     },
                 },
                 {
                     $lookup: {
-                        from: 'essay',
+                        from: 'essay_like',
                         localField: '_id',
-                        foreignField: 'topicId',
-                        as: 'essay',
+                        foreignField: 'essayId',
+                        as: 'like',
                     },
                 },
                 {
                     $addFields: {
-                        essayCount: { $size: '$essay' },
+                        likeCount: { $size: '$like' },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'essay_comment',
+                        localField: '_id',
+                        foreignField: 'essayId',
+                        as: 'comment',
+                    },
+                },
+                {
+                    $addFields: {
+                        commentCount: { $size: '$comment' },
                     },
                 },
                 {
                     $sort: {
-                        ...(sortBy === 'bookmarks' ? { bookmarkCount: -1 } : {}),
-                        ...(sortBy === 'essays' ? { essayCount: -1 } : {}),
+                        ...(sortBy === 'comments' ? { commentCount: -1 } : {}),
+                        ...(sortBy === 'likes' ? { likeCount: -1 } : {}),
                         ...(sortBy === 'date' ? { date: -1 } : {}),
                     },
                 },
             ])
             .toArray();
-        const limitedTopics = topics.slice(0, parseInt(limit as string, 10));
+        const limitedEssays = topics.slice(0, parseInt(limit as string, 10));
 
-        return response.status(200).json(limitedTopics);
+        return response.status(200).json(limitedEssays);
     } catch {
         return response.status(500).json('db 연결중 에러가 발생했습니다.');
     }

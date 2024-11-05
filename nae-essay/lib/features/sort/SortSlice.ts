@@ -3,28 +3,36 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 interface TopicSortType {
     id: number;
     name: 'date' | 'essays' | 'bookmarks';
+    totalCount: number;
 }
 interface EssaySortType {
     id: number;
     name: 'date' | 'comments' | 'likes';
+    totalCount: number;
+    topicTitle: string;
 }
 interface QnASortType {
     id: number;
     name: 'date' | 'comments' | 'likes';
+    totalCount: number;
 }
 
 const topicInitialState: TopicSortType = {
     id: 1,
     name: 'date',
+    totalCount: 0,
 };
 
 const essayInitialState: EssaySortType = {
     id: 1,
     name: 'date',
+    totalCount: 0,
+    topicTitle: '',
 };
 const qnaInitialState: QnASortType = {
     id: 1,
     name: 'date',
+    totalCount: 0,
 };
 
 export const TopicSortSlice = createSlice({
@@ -34,6 +42,9 @@ export const TopicSortSlice = createSlice({
         changeTopicSort(state, action: PayloadAction<{ name: 'date' | 'essays' | 'bookmarks'; id: number }>) {
             state.name = action.payload.name;
             state.id = action.payload.id;
+        },
+        changeTopicCount(state, action: PayloadAction<{ value: number }>) {
+            state.totalCount = action.payload.value;
         },
     },
 });
@@ -46,6 +57,12 @@ export const EssaySortSlice = createSlice({
             state.name = action.payload.name;
             state.id = action.payload.id;
         },
+        changeEssayCount(state, action: PayloadAction<{ value: number }>) {
+            state.totalCount = action.payload.value;
+        },
+        changeEssayTopicTitle(state, action: PayloadAction<{ value: string }>) {
+            state.topicTitle = action.payload.value;
+        },
     },
 });
 export const QnASortSlice = createSlice({
@@ -56,9 +73,12 @@ export const QnASortSlice = createSlice({
             state.name = action.payload.name;
             state.id = action.payload.id;
         },
+        changeQnaCount(state, action: PayloadAction<{ value: number }>) {
+            state.totalCount = action.payload.value;
+        },
     },
 });
 
-export const { changeTopicSort } = TopicSortSlice.actions;
-export const { changeEssaySort } = EssaySortSlice.actions;
-export const { changeQnaSort } = QnASortSlice.actions;
+export const { changeTopicSort, changeTopicCount } = TopicSortSlice.actions;
+export const { changeEssaySort, changeEssayCount, changeEssayTopicTitle } = EssaySortSlice.actions;
+export const { changeQnaSort, changeQnaCount } = QnASortSlice.actions;
