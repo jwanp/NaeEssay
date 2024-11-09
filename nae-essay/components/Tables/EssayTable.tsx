@@ -18,28 +18,25 @@ import EssaySearch from '../Search/EssaySearch';
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { changeEssayCount, changeEssayTopicTitle } from '@/lib/features/sort/SortSlice';
 
+import { useQuery } from 'react-query';
+
 export default function EssayTable({ id }: { id: string }): React.ReactElement {
     const dispatch = useAppDispatch();
 
     // 데이터 불러오기
     const essaySort = useAppSelector((state) => state.essaySort.name);
     const limit = 100;
-    const [essays, setEssays] = useState<EssayType[]>([]);
 
-    const fetchTopics = async () => {
-        try {
-            const response = await fetch(`/api/essay/essays?topicId=${id}&sortBy=${essaySort}&limit=${limit}`);
-            const data = await response.json();
-            setEssays(data);
-            dispatch(changeEssayCount({ value: data.length }));
-        } catch (error) {
-            console.error('Error fetching essays:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchTopics();
-    }, [essaySort, limit]);
+    const {
+        data: essays = [],
+        isLoading,
+        isError,
+    } = useQuery<EssayType[]>(['essays', essaySort], async () => {
+        const response = await fetch(`/api/essay/essays?topicId=${id}&sortBy=${essaySort}&limit=${limit}`);
+        const data = await response.json();
+        dispatch(changeEssayCount({ value: data.length }));
+        return data;
+    });
 
     // 페이지 번호 조정
     const [currentPage, setCurrentPage] = useState(0);
@@ -74,11 +71,12 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
-                {essays.length <= 0 ? (
+                {essays && essays.length <= 0 ? (
                     <div className="flex justify-center content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                         새로운 에세이를 작성하세요
                     </div>
                 ) : (
+                    essays &&
                     essays
                         .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
                         .map((essay, idx) => {

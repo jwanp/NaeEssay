@@ -9,6 +9,7 @@ import { getServerSession } from 'next-auth';
 import StoreProvider from './StoreProvider';
 import NavBar from '@/components/navbar/NavBar';
 
+import QueryProvider from './QueryProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -27,10 +28,12 @@ export default async function RootLayout({
         <html lang="en">
             <body className={inter.className}>
                 <div className="bg-[#f0f0f0]">
-                    <StoreProvider>
-                        <NavBar session={session}></NavBar>
-                        {children}
-                    </StoreProvider>
+                    <QueryProvider>
+                        <StoreProvider>
+                            <NavBar session={session}></NavBar>
+                            {children}
+                        </StoreProvider>
+                    </QueryProvider>
                 </div>
             </body>
         </html>

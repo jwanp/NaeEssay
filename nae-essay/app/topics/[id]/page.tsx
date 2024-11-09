@@ -48,7 +48,7 @@ export default async function Essays({ params }: { params: Params }) {
         return (
             <div className=" max-w-[1240px] min-h-screen pt-[20px] px-0 pb-[100px] mt-0 mx-auto">
                 {/* header */}
-                <EssayTableHeader topic={result.title} />
+                <EssayTableHeader topic={result.title} topicId={params.id} />
                 <EssayTable id={params.id} />
             </div>
         );

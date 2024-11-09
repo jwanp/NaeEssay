@@ -8,16 +8,14 @@ interface Outline {
 
 interface Essay {
     topic: string;
-    author: string;
-    date: string;
+    topicId: string;
     content: Outline[];
     public: boolean;
 }
 
 const initialState: Essay = {
-    topic: 'Essay Topic',
-    author: 'jwanp',
-    date: '2024-09-16',
+    topic: '',
+    topicId: '',
     content: [
         {
             outline: 'Outline',
@@ -31,6 +29,10 @@ export const EssaySlice = createSlice({
     name: 'essay',
     initialState,
     reducers: {
+        chageTopic(state, action: PayloadAction<{ value: string; id: string }>) {
+            state.topic = action.payload.value;
+            state.topicId = action.payload.id;
+        },
         changeOutline(state, action: PayloadAction<{ value: string; idx: number }>) {
             state.content[action.payload.idx].outline = action.payload.value;
         },
@@ -47,4 +49,4 @@ export const EssaySlice = createSlice({
 });
 
 export default EssaySlice.reducer;
-export const { changeOutline, changeContent, addOutline, deleteOutline } = EssaySlice.actions;
+export const { chageTopic, changeOutline, changeContent, addOutline, deleteOutline } = EssaySlice.actions;

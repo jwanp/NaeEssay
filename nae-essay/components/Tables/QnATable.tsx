@@ -7,7 +7,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
-import { changeQnaCount } from '@/lib/features/sort/SortSlice';
+import { changeQnaCount, changeQnaSort } from '@/lib/features/sort/SortSlice';
+
+import { useQuery } from 'react-query';
 
 export default function QnATable(): React.ReactElement {
     const dispatch = useAppDispatch();
@@ -15,22 +17,17 @@ export default function QnATable(): React.ReactElement {
     // 데이터 불러오기
     const qnaSort = useAppSelector((state) => state.qnaSort.name);
     const limit = 100;
-    const [qnas, setQnas] = useState<QnAType[]>([]);
 
-    const fetchTopics = async () => {
-        try {
-            const response = await fetch(`/api/qna/qnas?sortBy=${qnaSort}&limit=${limit}`);
-            const data = await response.json();
-            setQnas(data);
-            dispatch(changeQnaCount({ value: data.length }));
-        } catch (error) {
-            console.error('Error fetching qnas:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchTopics();
-    }, [qnaSort, limit]);
+    const {
+        data: qnas = [],
+        isLoading,
+        isError,
+    } = useQuery<QnAType[]>(['qnas', qnaSort], async () => {
+        const response = await fetch(`/api/qna/qnas?sortBy=${qnaSort}&limit=${limit}`);
+        const data = await response.json();
+        dispatch(changeQnaCount({ value: data.length }));
+        return data;
+    });
 
     // 페이지 번호 조정
     const [currentPage, setCurrentPage] = useState(0);
@@ -65,11 +62,12 @@ export default function QnATable(): React.ReactElement {
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
-                {qnas.length <= 0 ? (
+                {qnas && qnas.length <= 0 ? (
                     <div className="flex justify-center content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                         새로운 질문을 작성하세요
                     </div>
                 ) : (
+                    qnas &&
                     qnas.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((qna, idx) => {
                         return (
                             <div key={qna.id}>

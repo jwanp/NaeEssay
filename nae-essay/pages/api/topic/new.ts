@@ -53,7 +53,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
             try {
                 let db = (await connectDB).db('nae-essay');
                 let sameTopic = await db.collection('topic').findOne({ title: requestBody.title });
-                if (!sameTopic) {
+                if (sameTopic) {
                     return response.status(500).json({ message: '이미 있는 주제 입니다.' });
                 }
                 let result = db.collection('topic').insertOne({ ...requestBody });

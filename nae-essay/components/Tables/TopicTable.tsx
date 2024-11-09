@@ -10,27 +10,24 @@ import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { getDatePrintFormat } from '@/utils/string';
 import { changeTopicCount } from '@/lib/features/sort/SortSlice';
 
+import { useQuery } from 'react-query';
+
 export default function TopicTable() {
     const dispatch = useAppDispatch();
     // 데이터 불러오기
     const topicSort = useAppSelector((state) => state.topicSort.name);
     const limit = 100;
-    const [topics, setTopics] = useState<TopicType[]>([]);
 
-    const fetchTopics = async () => {
-        try {
-            const response = await fetch(`/api/topic/topics?sortBy=${topicSort}&limit=${limit}`);
-            const data = await response.json();
-            setTopics(data);
-            dispatch(changeTopicCount({ value: data.length }));
-        } catch (error) {
-            console.error('Error fetching topics:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchTopics();
-    }, [topicSort, limit]);
+    const {
+        data: topics = [],
+        isLoading,
+        isError,
+    } = useQuery<TopicType[]>(['topics', topicSort], async () => {
+        const response = await fetch(`/api/topic/topics?sortBy=${topicSort}&limit=${limit}`);
+        const data = await response.json();
+        dispatch(changeTopicCount({ value: data.length }));
+        return data;
+    });
 
     // 페이지 번호 조정
     const [currentPage, setCurrentPage] = useState(0);
@@ -65,62 +62,65 @@ export default function TopicTable() {
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
-                {topics.slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage).map((topic, idx) => {
-                    return (
-                        <div key={topic._id}>
-                            {/* 전체 사이즈 */}
-                            <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
-                                <Link
-                                    href={'topics/' + topic._id}
-                                    className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
-                                    <div className="truncate max-w-full">{topic.title}</div>
-                                </Link>
-                                <div className="min-w-0 mr-4 content-center w-[180px]">
-                                    <div className="truncate max-w-full">{topic.author}</div>
-                                </div>
-                                <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {getDatePrintFormat(topic.date)}
-                                </div>
-                                <div className="content-center flex gap-5 w-[200px] text-[14px]">
-                                    <div className="flex  content-center">
-                                        <DocumentIcon />
-                                        <div className="ml-[6px] content-center">{topic.essayCount}</div>
-                                    </div>
-                                    <div className="flex content-center">
-                                        <BookmarkIcon />
-                                        <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* 테블릿 이하 사이즈 */}
-                            <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
-                                <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                    {getDatePrintFormat(topic.date)}
-                                </div>
-                                <Link
-                                    href={'topics/' + topic._id}
-                                    className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
-                                    <div className="truncate max-w-full">{topic.title}</div>
-                                </Link>
-                                <div className="flex justify-between">
-                                    <div className="min-w-0 mr-4 content-center w-[180px]">
-                                        <div className="truncate max-w-full">{topic.author}</div>
-                                    </div>
-                                    <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
-                                        <div className="flex  content-center">
-                                            <DocumentIcon />
-                                            <div className="ml-[6px] content-center">{topic.essayCount}</div>
+                {topics &&
+                    topics
+                        .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
+                        .map((topic, idx) => {
+                            return (
+                                <div key={topic._id}>
+                                    {/* 전체 사이즈 */}
+                                    <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
+                                        <Link
+                                            href={'topics/' + topic._id}
+                                            className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
+                                            <div className="truncate max-w-full">{topic.title}</div>
+                                        </Link>
+                                        <div className="min-w-0 mr-4 content-center w-[180px]">
+                                            <div className="truncate max-w-full">{topic.author}</div>
                                         </div>
-                                        <div className="flex content-center">
-                                            <BookmarkIcon />
-                                            <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
+                                        <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
+                                            {getDatePrintFormat(topic.date)}
+                                        </div>
+                                        <div className="content-center flex gap-5 w-[200px] text-[14px]">
+                                            <div className="flex  content-center">
+                                                <DocumentIcon />
+                                                <div className="ml-[6px] content-center">{topic.essayCount}</div>
+                                            </div>
+                                            <div className="flex content-center">
+                                                <BookmarkIcon />
+                                                <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
+                                            </div>
                                         </div>
                                     </div>
+                                    {/* 테블릿 이하 사이즈 */}
+                                    <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
+                                        <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
+                                            {getDatePrintFormat(topic.date)}
+                                        </div>
+                                        <Link
+                                            href={'topics/' + topic._id}
+                                            className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
+                                            <div className="truncate max-w-full">{topic.title}</div>
+                                        </Link>
+                                        <div className="flex justify-between">
+                                            <div className="min-w-0 mr-4 content-center w-[180px]">
+                                                <div className="truncate max-w-full">{topic.author}</div>
+                                            </div>
+                                            <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
+                                                <div className="flex  content-center">
+                                                    <DocumentIcon />
+                                                    <div className="ml-[6px] content-center">{topic.essayCount}</div>
+                                                </div>
+                                                <div className="flex content-center">
+                                                    <BookmarkIcon />
+                                                    <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                            );
+                        })}
             </div>
             <div className="w-full flex justify-center h-[80px]">
                 <nav className="px-[8px] py-[16px]" aria-label="Page navigation example">

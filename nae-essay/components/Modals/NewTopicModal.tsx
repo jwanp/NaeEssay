@@ -8,6 +8,9 @@ import toast, { toastConfig } from 'react-simple-toasts';
 import 'react-simple-toasts/dist/style.css';
 import 'react-simple-toasts/dist/theme/failure.css';
 import 'react-simple-toasts/dist/theme/success.css';
+
+import { useQueryClient, useMutation } from 'react-query';
+
 toastConfig({
     theme: 'failure',
     duration: 5000,
@@ -28,6 +31,35 @@ export default function NewTopicModal({ isOpen, onClose }: NewTopicModalProps) {
         setIsChecked(event.target.checked); // Update state based on checkbox status
     };
 
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation(
+        async (newTopic: { title: string; is_public: boolean }) => {
+            const response = await fetch('/api/topic/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTopic),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+            return data;
+        },
+        {
+            onSuccess: (data) => {
+                toast(data.message, { theme: 'success' });
+                queryClient.invalidateQueries('topics'); // Refetch topics list
+                onClose(); // Close the modal
+            },
+            onError: (error: any) => {
+                toast(error.message || 'An error occurred');
+            },
+        }
+    );
+
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
@@ -37,36 +69,7 @@ export default function NewTopicModal({ isOpen, onClose }: NewTopicModalProps) {
             is_public: isChecked, // assuming `is_public` is a checkbox or select
         };
 
-        try {
-            // Send a POST request with the form data
-            const response = await fetch('/api/topic/new', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            // Process the response
-            const resultData: { message: string } = await response.json();
-            if (response.ok) {
-                // setResult(`Success: ${data.message}`);
-                toast(resultData.message, { theme: 'success' });
-                onClose();
-            } else {
-                // setResult(`Error: ${data.message || 'Something went wrong'}`);
-                toast(resultData.message);
-            }
-        } catch (error: unknown) {
-            // setResult(`Error: ${(error as Error).message}`);
-            if (error instanceof Error) {
-                // Access the message property safely
-                toast(error.message);
-            } else {
-                // Fallback message for unknown errors
-                toast('에러 발생');
-            }
-        }
+        mutation.mutate(data);
     };
     return (
         <Dialog open={isOpen} onClose={onClose} className="relative z-10">
