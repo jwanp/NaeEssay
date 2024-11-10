@@ -9,8 +9,16 @@ import { DocumentIcon, FilledDocumentIcon, BookmarkIcon, FilledBookmarkIcon, Pre
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { getDatePrintFormat } from '@/utils/string';
 import { changeTopicCount } from '@/lib/features/sort/SortSlice';
-
+import toast, { toastConfig } from 'react-simple-toasts';
 import { useQuery } from 'react-query';
+
+toastConfig({
+    theme: 'failure',
+    duration: 5000,
+    position: 'top-right',
+    clickClosable: true,
+    maxVisibleToasts: 3,
+});
 
 export default function TopicTable() {
     const dispatch = useAppDispatch();
@@ -25,6 +33,10 @@ export default function TopicTable() {
     } = useQuery<TopicType[]>(['topics', topicSort], async () => {
         const response = await fetch(`/api/topic/topics?sortBy=${topicSort}&limit=${limit}`);
         const data = await response.json();
+        if (!response.ok) {
+            toast(data);
+            return;
+        }
         dispatch(changeTopicCount({ value: data.length }));
         return data;
     });
@@ -62,7 +74,7 @@ export default function TopicTable() {
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
-                {topics &&
+                {topics.length != 0 &&
                     topics
                         .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
                         .map((topic, idx) => {

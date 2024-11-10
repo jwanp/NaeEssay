@@ -54,7 +54,7 @@ function FloatingMenu({ show, ...props }: FloatingMenuProps) {
     return (
         <div
             ref={ref}
-            style={{ top: pos?.y, left: pos?.x }}
+            style={{ top: pos?.y ? pos?.y : 5, left: pos?.x }}
             aria-hidden={!pos?.x || !pos?.y}
             className={`absolute flex items-center justify-between bg-slate-100 border-[1px] border-slate-300 rounded-md p-1 gap-1 ${pos?.x && pos?.y ? 'opacity-1 visible' : 'opacity-0 invisible'}`}>
             <IconButton

@@ -64,26 +64,7 @@ export default function Editor({ idx }: { idx: number }) {
     const initialConfig: ComponentProps<typeof LexicalComposer>['initialConfig'] = {
         namespace: 'MyEditor',
         nodes: EDITOR_NODES,
-        // theme: {
-        //     link: 'cursor-pointer underline text-blue-600 hover:text-blue-800 visited:text-purple-600',
-        //     text: {
-        //         bold: 'font-semibold',
-        //         underline: 'underline',
-        //         italic: 'italic',
-        //         strikethrough: 'line-through',
-        //         underlineStrikethrough: 'underlined-line-through',
-        //     },
-        //     list: {
-        //         ul: styles.ul,
-        //         ol: styles.ol,
-        //         listitem: styles.listitem,
-        //         nested: {
-        //             listitem: styles.nestedListItem,
-        //         },
-        //         listitemChecked: styles.listitemChecked,
-        //         listitemUnchecked: styles.listitemUnchecked,
-        //     },
-        // },
+
         theme: editorTheme,
         onError: (error) => console.error(error),
     };
