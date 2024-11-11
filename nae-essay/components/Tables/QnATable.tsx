@@ -100,7 +100,7 @@ export default function QnATable(): React.ReactElement {
                                 {/* 테블릿 이하 사이즈 */}
                                 <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
                                     <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                        {qna.date}
+                                        {getDatePrintFormat(qna.date)}
                                     </div>
                                     <Link
                                         href={'qna/' + qna.id}

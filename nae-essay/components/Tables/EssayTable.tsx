@@ -120,15 +120,13 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                         key={essay.id}
                                         className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
                                         <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                            {essay.date}
+                                            {getDatePrintFormat(essay.date)}
                                         </div>
                                         <Link href={'essay/' + essay.id} className="mr-4 content-center flex-1 min-w-0">
                                             <h4 className="truncate max-w-full font-normal text-base  text-black">
                                                 {essay.content[0].outline}
                                             </h4>
-                                            <p className="truncate max-w-full text-[13px]">
-                                                {essay.content[0].content}
-                                            </p>
+                                            <p className="truncate max-w-full text-[13px]">{essay.content[0].text}</p>
                                         </Link>
                                         <div className="flex justify-between">
                                             <div className="min-w-0 mr-4 content-center w-[180px]">
