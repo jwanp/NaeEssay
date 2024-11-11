@@ -11,6 +11,8 @@ import { changeQnaCount, changeQnaSort } from '@/lib/features/sort/SortSlice';
 
 import { useQuery } from 'react-query';
 
+import { getDatePrintFormat } from '@/utils/string';
+
 export default function QnATable(): React.ReactElement {
     const dispatch = useAppDispatch();
 
@@ -57,7 +59,7 @@ export default function QnATable(): React.ReactElement {
         <div className="max-w-[1200px] bg-white rounded-sm">
             <div className=" px-[20px] hidden md:flex w-full   text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
                 <div className="mr-4 content-center flex-1 font-medium text-base ">제목</div>
-                <div className="mr-4 content-center w-[160px] font-medium text-base">저자</div>
+                <div className="mr-4 content-center w-[180px] font-medium text-base">저자</div>
                 <div className="mr-4 content-center w-[105px] font-medium text-base">날짜</div>
                 <div className="content-center w-[200px]"></div>
             </div>
@@ -78,11 +80,11 @@ export default function QnATable(): React.ReactElement {
                                         className=" min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                         <div className="truncate max-w-full">{qna.title}</div>
                                     </Link>
-                                    <div className="min-w-0 mr-4 content-center w-[160px]">
+                                    <div className="min-w-0 mr-4 content-center w-[180px]">
                                         <div className="truncate max-w-full">{qna.author}</div>
                                     </div>
                                     <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                        {qna.date}
+                                        {getDatePrintFormat(qna.date)}
                                     </div>
                                     <div className="content-center flex gap-5 w-[200px] text-[14px]">
                                         <div className="flex  content-center">
@@ -106,7 +108,7 @@ export default function QnATable(): React.ReactElement {
                                         <div className="truncate max-w-full">{qna.title}</div>
                                     </Link>
                                     <div className="flex justify-between">
-                                        <div className="min-w-0 mr-4 content-center w-[160px]">
+                                        <div className="min-w-0 mr-4 content-center w-[180px]">
                                             <div className="truncate max-w-full">{qna.author}</div>
                                         </div>
                                         <div className="content-center justify-end flex gap-5 w-[200px] text-[14px]">

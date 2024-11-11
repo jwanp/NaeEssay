@@ -32,6 +32,8 @@ import editorTheme from './EditorThems';
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import RestoreFromReduxPlugin from './plugins/RestoreFromReduxPlugin';
 
+import { $getRoot } from 'lexical';
+
 const EDITOR_NODES = [
     AutoLinkNode,
     AutoLinkNode,
@@ -52,6 +54,13 @@ export default function Editor({ idx }: { idx: number }) {
 
     function onContentChange(editorState: EditorState, idx: number) {
         const editorStateJSON = editorState.toJSON();
+        let plainText: string | null = null;
+        if (idx == 0) {
+            plainText = editorState.read(() => $getRoot().getTextContent());
+            dispatch(changeContent({ value: JSON.stringify(editorStateJSON), idx: idx, text: plainText }));
+            return;
+        }
+
         dispatch(changeContent({ value: JSON.stringify(editorStateJSON), idx: idx }));
     }
 

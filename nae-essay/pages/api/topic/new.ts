@@ -30,11 +30,6 @@ export default async function handler(request: NextApiRequest, response: NextApi
     let requestBody: Topic | null = null;
 
     if (session) {
-        if (request.body.is_public == 'on') {
-            request.body.is_public = true;
-        } else {
-            request.body.is_public = false;
-        }
         requestBody = {
             title: request.body.title,
             is_public: request.body.is_public,

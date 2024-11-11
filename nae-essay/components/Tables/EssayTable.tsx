@@ -20,6 +20,8 @@ import { changeEssayCount, changeEssayTopicTitle } from '@/lib/features/sort/Sor
 
 import { useQuery } from 'react-query';
 
+import { getDatePrintFormat } from '@/utils/string';
+
 export default function EssayTable({ id }: { id: string }): React.ReactElement {
     const dispatch = useAppDispatch();
 
@@ -31,10 +33,10 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
         data: essays = [],
         isLoading,
         isError,
-    } = useQuery<EssayType[]>(['essays', essaySort], async () => {
+    } = useQuery<EssayType[]>(['essays', id, essaySort], async () => {
         const response = await fetch(`/api/essay/essays?topicId=${id}&sortBy=${essaySort}&limit=${limit}`);
         const data = await response.json();
-        dispatch(changeEssayCount({ value: data.length }));
+
         return data;
     });
 
@@ -62,11 +64,15 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
         setPageRange({ startPage, endPage });
     }, [currentPage, totalPages]);
 
+    useEffect(() => {
+        dispatch(changeEssayCount({ value: essays.length }));
+    }, [essays]);
+
     return (
         <div className="max-w-[1200px] bg-white rounded-sm">
             <div className=" px-[20px] hidden md:flex w-full   text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
-                <div className="mr-4 content-center flex-1 font-medium text-base ">주제</div>
-                <div className="mr-4 content-center w-[160px] font-medium text-base">저자</div>
+                <div className="mr-4 content-center flex-1 font-medium text-base ">에세이</div>
+                <div className="mr-4 content-center w-[180px] font-medium text-base">저자</div>
                 <div className="mr-4 content-center w-[105px] font-medium text-base">날짜</div>
                 <div className="content-center w-[200px]"></div>
             </div>
@@ -86,17 +92,17 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                     <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                                         <Link href={'essay/' + essay.id} className="mr-4 content-center flex-1 min-w-0">
                                             <h4 className="truncate max-w-full font-normal text-base  text-black">
-                                                {essay.content[0].outline}
+                                                {essay.content[0].outline && essay.content[0].outline}
                                             </h4>
                                             <p className="truncate max-w-full text-[13px]">
-                                                {essay.content[0].content}
+                                                {essay.content[0].text && essay.content[0].text}
                                             </p>
                                         </Link>
-                                        <div className="min-w-0 mr-4 content-center w-[160px]">
+                                        <div className="min-w-0 mr-4 content-center w-[180px]">
                                             <div className="truncate max-w-full">{essay.author}</div>
                                         </div>
                                         <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                            {essay.date}
+                                            {getDatePrintFormat(essay.date)}
                                         </div>
                                         <div className="content-center flex gap-5 w-[200px] text-[14px]">
                                             <div className="flex content-center">
@@ -110,7 +116,9 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                         </div>
                                     </div>
                                     {/* 테블릿 이하 사이즈 */}
-                                    <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
+                                    <div
+                                        key={essay.id}
+                                        className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
                                         <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
                                             {essay.date}
                                         </div>
@@ -123,7 +131,7 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                             </p>
                                         </Link>
                                         <div className="flex justify-between">
-                                            <div className="min-w-0 mr-4 content-center w-[160px]">
+                                            <div className="min-w-0 mr-4 content-center w-[180px]">
                                                 <div className="truncate max-w-full">{essay.author}</div>
                                             </div>
                                             <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">

@@ -37,6 +37,7 @@ export interface QnAType {
 export interface EssayContentType {
     outline: string;
     content: string;
+    text?: string;
 }
 
 export interface EssayType {

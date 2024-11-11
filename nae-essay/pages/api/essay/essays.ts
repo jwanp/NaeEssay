@@ -1,6 +1,7 @@
 // pages/api/topics.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connectDB } from '@/utils/database';
+import { ObjectId } from 'mongodb';
 
 /*
 /api/topic/topics?sortBy=${sortBy} 으로 날려야 한다.
@@ -59,7 +60,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
                 // Filter for essays with the matching topicId
                 {
                     $match: {
-                        topicId: topicId,
+                        topicId: new ObjectId(topicId as string),
                     },
                 },
                 {
