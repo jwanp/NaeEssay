@@ -21,7 +21,7 @@ export default function NavBar({ session }: { session: Session | null }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     return (
-        <div className=" bg-white px-6">
+        <div className=" bg-white px-6 fixed top-0 left-0 z-50 w-full ">
             <div className="flex h-16 shadow-sm justify-between max-w-7xl mx-auto items-center ">
                 <Link href="/">Nae Essay</Link>
                 <div className="md:flex font-light text-sm hidden  ">

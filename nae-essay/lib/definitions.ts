@@ -1,5 +1,5 @@
 import { EditorState } from 'lexical';
-
+import { ObjectId } from 'mongodb';
 // 공유하는 타입들 지정해 두는 파일
 export interface Outline {
     outline: string;
@@ -36,20 +36,35 @@ export interface QnAType {
 
 export interface EssayContentType {
     outline: string;
-    content: string;
-    text?: string;
+    text: string;
+    htmlString: string;
 }
 
 export interface EssayType {
-    id: string;
+    _id: string;
     topic: string;
     topicId: string;
     author: string;
     date: string;
     content: EssayContentType[];
     public: boolean;
-    comments: unknown;
-    likes: unknown;
-    commentCount: number;
-    likeCount: number;
+    comments?: unknown;
+    likes?: unknown;
+    commentCount?: number;
+    likeCount?: number;
+}
+
+export interface EssayLike {
+    _id?: ObjectId;
+    essayId: ObjectId;
+    userId: ObjectId;
+    likedAt: Date;
+}
+
+export interface EssayComment {
+    _id?: ObjectId;
+    essayId: ObjectId;
+    author: string;
+    content: string;
+    date: Date;
 }

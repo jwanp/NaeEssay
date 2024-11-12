@@ -27,7 +27,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body className={inter.className}>
-                <div className="bg-[#f0f0f0] ">
+                <div className="bg-[#f0f0f0] mt-10 min-h-screen">
                     <QueryProvider>
                         <StoreProvider>
                             <NavBar session={session}></NavBar>

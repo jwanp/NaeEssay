@@ -3,20 +3,11 @@
 import { EssayType } from '@/lib/definitions';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import {
-    DocumentIcon,
-    FilledDocumentIcon,
-    BookmarkIcon,
-    FilledBookmarkIcon,
-    PreviousIcon,
-    NextIcon,
-    LikeIcon,
-    CommentIcon,
-} from './Icons';
+import { PreviousIcon, NextIcon, LikeIcon, CommentIcon } from './Icons';
 import EssaySearch from '../Search/EssaySearch';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
-import { changeEssayCount, changeEssayTopicTitle } from '@/lib/features/sort/SortSlice';
+import { changeEssayCount } from '@/lib/features/sort/SortSlice';
 
 import { useQuery } from 'react-query';
 
@@ -87,10 +78,12 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                         .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
                         .map((essay, idx) => {
                             return (
-                                <div key={essay.id}>
+                                <div key={essay._id}>
                                     {/* 전체 사이즈 */}
                                     <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
-                                        <Link href={'essay/' + essay.id} className="mr-4 content-center flex-1 min-w-0">
+                                        <Link
+                                            href={'/essay/' + essay._id}
+                                            className="mr-4 content-center flex-1 min-w-0">
                                             <h4 className="truncate max-w-full font-normal text-base  text-black">
                                                 {essay.content[0].outline && essay.content[0].outline}
                                             </h4>
@@ -117,12 +110,14 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                     </div>
                                     {/* 테블릿 이하 사이즈 */}
                                     <div
-                                        key={essay.id}
+                                        key={essay._id}
                                         className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
                                         <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
                                             {getDatePrintFormat(essay.date)}
                                         </div>
-                                        <Link href={'essay/' + essay.id} className="mr-4 content-center flex-1 min-w-0">
+                                        <Link
+                                            href={'/essay/' + essay._id}
+                                            className="mr-4 content-center flex-1 min-w-0">
                                             <h4 className="truncate max-w-full font-normal text-base  text-black">
                                                 {essay.content[0].outline}
                                             </h4>

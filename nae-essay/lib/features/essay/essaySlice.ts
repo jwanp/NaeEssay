@@ -3,8 +3,9 @@ import { EditorState } from 'lexical';
 import { EssayType, EssayContentType } from '@/lib/definitions';
 interface Outline {
     outline: string;
-    content: string;
-    text?: string;
+    content?: string;
+    text: string;
+    htmlString?: string;
 }
 
 export interface Essay {
@@ -23,6 +24,7 @@ const initialState: Essay = {
         {
             outline: 'Outline',
             content: '',
+            text: '',
         },
     ],
     public: true,
@@ -39,15 +41,18 @@ export const EssaySlice = createSlice({
         changeOutline(state, action: PayloadAction<{ value: string; idx: number }>) {
             state.content[action.payload.idx].outline = action.payload.value;
         },
-        changeContent(state, action: PayloadAction<{ value: string; idx: number; text?: string }>) {
+        changeContent(state, action: PayloadAction<{ value: string; idx: number; text: string }>) {
             const { value, idx, text = null } = action.payload;
             state.content[action.payload.idx].content = action.payload.value;
             if (text != null) {
                 state.content[action.payload.idx].text = action.payload.text;
             }
         },
+        saveHtmlContent(state, action: PayloadAction<{ htmlString: string; idx: number }>) {
+            state.content[action.payload.idx].htmlString = action.payload.htmlString;
+        },
         addOutline(state) {
-            state.content.push({ outline: '', content: '' });
+            state.content.push({ outline: '', content: '', text: '' });
         },
         deleteOutline(state, action: PayloadAction<{ idx: number }>) {
             state.content.splice(action.payload.idx, 1);
@@ -55,9 +60,20 @@ export const EssaySlice = createSlice({
         changeEssayId(state, action: PayloadAction<{ essayId: string }>) {
             state.essayId = action.payload.essayId;
         },
+        clearEssay(state) {
+            return initialState;
+        },
     },
 });
 
 export default EssaySlice.reducer;
-export const { chageTopic, changeOutline, changeContent, addOutline, deleteOutline, changeEssayId } =
-    EssaySlice.actions;
+export const {
+    chageTopic,
+    changeOutline,
+    changeContent,
+    addOutline,
+    deleteOutline,
+    changeEssayId,
+    saveHtmlContent,
+    clearEssay,
+} = EssaySlice.actions;

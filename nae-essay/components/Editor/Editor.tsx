@@ -5,7 +5,6 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import MyOnChangePlugin from '@/components/Editor/plugins/MyOnChangePlugin';
 
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
@@ -23,9 +22,9 @@ import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugi
 import { validateUrl } from '@/utils/string';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
-import { changeContent } from '@/lib/features/essay/essaySlice';
+import { changeContent, saveHtmlContent } from '@/lib/features/essay/essaySlice';
 
-import { $getEditor, EditorState } from 'lexical';
+import { $getEditor, EditorState, LexicalEditor } from 'lexical';
 import { FloatingMenuPlugin } from './plugins/FloatingMenu';
 import { AutoLinkPlugin } from './plugins/LinkPlugin';
 import editorTheme from './EditorThems';
@@ -33,6 +32,7 @@ import CodeHighlightPlugin from './plugins/CodeHighlightPlugin';
 import RestoreFromReduxPlugin from './plugins/RestoreFromReduxPlugin';
 
 import { $getRoot } from 'lexical';
+import { $generateHtmlFromNodes } from '@lexical/html';
 
 const EDITOR_NODES = [
     AutoLinkNode,
@@ -46,29 +46,24 @@ const EDITOR_NODES = [
     QuoteNode,
 ];
 
-export default function Editor({ idx }: { idx: number }) {
+import MyOnSavePlugin from './plugins/MyOnSavePlugin';
+
+export default function Editor({ idx, saveKey }: { idx: number; saveKey: number }) {
     const dispatch = useAppDispatch();
-    const essay = useAppSelector((state) => state.essay);
-    // PlugIn 을 따로 만들어서 저장한다.
-    // const initialEditorState: JSON = JSON.parse(essay.content[idx].content);
 
     function onContentChange(editorState: EditorState, idx: number) {
         const editorStateJSON = editorState.toJSON();
         let plainText: string | null = null;
-        if (idx == 0) {
-            plainText = editorState.read(() => $getRoot().getTextContent());
-            dispatch(changeContent({ value: JSON.stringify(editorStateJSON), idx: idx, text: plainText }));
-            return;
-        }
 
-        dispatch(changeContent({ value: JSON.stringify(editorStateJSON), idx: idx }));
+        plainText = editorState.read(() => $getRoot().getTextContent());
+        dispatch(changeContent({ value: JSON.stringify(editorStateJSON), idx: idx, text: plainText }));
     }
 
-    // const editorStateRef = useRef<EditorState | undefined>(undefined);
-
-    const saveEssayContent = (value: string, idx: number) => {
-        dispatch(changeContent({ value, idx }));
-    };
+    function onSaveContent(editor: LexicalEditor, idx: number) {
+        let htmlString: string | null = null;
+        htmlString = editor.getEditorState().read(() => $generateHtmlFromNodes(editor));
+        dispatch(saveHtmlContent({ htmlString, idx }));
+    }
 
     const initialConfig: ComponentProps<typeof LexicalComposer>['initialConfig'] = {
         namespace: 'MyEditor',
@@ -96,6 +91,7 @@ export default function Editor({ idx }: { idx: number }) {
                 }}
             /> */}
             <MyOnChangePlugin onChange={onContentChange} idx={idx} />
+            <MyOnSavePlugin onSaveContent={onSaveContent} saveKey={saveKey} idx={idx} />
             <button
                 onClick={() => {
                     // if (editorStateRef.current) {

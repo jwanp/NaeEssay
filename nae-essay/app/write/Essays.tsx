@@ -2,10 +2,10 @@
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { changeContent, changeEssayId } from '@/lib/features/essay/essaySlice';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Editor from '../../components/Editor/Editor';
 import { useQueryClient, useMutation } from 'react-query';
-import { Essay } from '@/lib/features/essay/essaySlice';
+import { Essay, clearEssay } from '@/lib/features/essay/essaySlice';
 import toast, { toastConfig } from 'react-simple-toasts';
 
 import 'react-simple-toasts/dist/style.css';
@@ -23,15 +23,11 @@ toastConfig({
 export default function Essays() {
     const essay = useAppSelector((state) => state.essay);
     const dispatch = useAppDispatch();
-    const firstTextRef = useRef<string>('');
-    const changeFirstText = (value: string) => {
-        firstTextRef.current = value;
-    };
 
     let router = useRouter();
 
     useEffect(() => {
-        if (essay.topic == '') {
+        if (essay.topic == '' || essay == undefined) {
             router.back();
         }
     }, [essay.topic]);
@@ -81,15 +77,38 @@ export default function Essays() {
         }
     );
 
+    const [saveKey, setSaveKey] = useState<number>(0);
+    const saveRef = useRef<number>(0);
+    const savedRef = useRef<number>(0);
     const handleSave = async () => {
-        // 나중에 추가적으로 에세이 보이는 페이지로 넘어가야한다.
-
-        const data = {
-            ...essay,
-        };
-
-        mutation.mutate(data);
+        setSaveKey(saveKey + 1);
     };
+
+    // 클릭 했을시에 MyOnSavePlugin 에서 htmlString 을 저장한뒤에 => POST 요청 한다.
+    const essayHTMLString = essay.content.map((item) => item.htmlString ?? '').join('');
+    useEffect(() => {
+        if (saveKey != 0 && saveKey > saveRef.current && essayHTMLString != '') {
+            saveRef.current = saveKey;
+            const filteredEssay = {
+                ...essay, // Keep other properties of `essay`
+                content: essay.content.map((item) => {
+                    // Return a new object with `content` removed
+                    const { content, ...rest } = item; // Exclude the `content` property
+                    return rest;
+                }),
+            };
+
+            mutation.mutate(filteredEssay);
+            router.push('/topics/' + essay.topicId);
+            // 나중에 추가적으로 에세이 보이는 페이지로 넘어가야한다.
+        }
+    }, [saveKey, essayHTMLString]);
+
+    useEffect(() => {
+        if (savedRef.current > 0) {
+            dispatch(clearEssay());
+        }
+    }, [savedRef]);
 
     return (
         <div className="flex-1 rounded-md bg-white mt-8 mx-3">
@@ -107,7 +126,7 @@ export default function Essays() {
                         return (
                             <div className="py-3 px-5 shadow-sm break-words" key={i.toString()}>
                                 <p className="p-2 pl-4 text-2xl dark:text-white">{outlineContent.outline}</p>
-                                <Editor idx={i} />
+                                <Editor idx={i} saveKey={saveKey} />
                             </div>
                         );
                     })}

@@ -4,7 +4,19 @@ import { connectDB } from '@/utils/database';
 import { ObjectId } from 'mongodb';
 
 import { redirect } from 'next/navigation';
-import toast from 'react-simple-toasts';
+
+import toast, { toastConfig } from 'react-simple-toasts';
+import 'react-simple-toasts/dist/style.css';
+import 'react-simple-toasts/dist/theme/failure.css';
+import 'react-simple-toasts/dist/theme/success.css';
+
+toastConfig({
+    theme: 'failure',
+    duration: 5000,
+    position: 'top-right',
+    clickClosable: true,
+    maxVisibleToasts: 3,
+});
 
 type Params = {
     id: string;

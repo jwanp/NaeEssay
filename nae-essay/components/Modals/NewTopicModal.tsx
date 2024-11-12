@@ -9,8 +9,6 @@ import 'react-simple-toasts/dist/style.css';
 import 'react-simple-toasts/dist/theme/failure.css';
 import 'react-simple-toasts/dist/theme/success.css';
 
-import { useQueryClient, useMutation } from 'react-query';
-
 toastConfig({
     theme: 'failure',
     duration: 5000,
@@ -18,6 +16,8 @@ toastConfig({
     clickClosable: true,
     maxVisibleToasts: 3,
 });
+
+import { useQueryClient, useMutation } from 'react-query';
 
 interface NewTopicModalProps {
     isOpen: boolean;
