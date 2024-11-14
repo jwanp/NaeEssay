@@ -92,9 +92,9 @@ export default function TopicTable() {
                                         <Link
                                             href={{
                                                 pathname: 'topics/' + topic._id,
-                                                query: {
-                                                    bookmarkId: topic.bookmark[0] && topic.bookmark[0]._id,
-                                                }, // Passing bookmark status as query param
+                                                query: topic.bookmark[0]
+                                                    ? { bookmarkId: topic.bookmark[0]._id }
+                                                    : undefined, // Passing bookmark status as query param
                                             }}
                                             className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                             <div className="truncate max-w-full">{topic.title}</div>
@@ -124,7 +124,9 @@ export default function TopicTable() {
                                         <Link
                                             href={{
                                                 pathname: 'topics/' + topic._id,
-                                                query: { bookmarkId: topic.bookmark[0] && topic.bookmark[0]._id }, // Passing bookmark status as query param
+                                                query: topic.bookmark[0]
+                                                    ? { bookmarkId: topic.bookmark[0]._id }
+                                                    : undefined, // Passing bookmark status as query param
                                             }}
                                             className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                             <div className="truncate max-w-full">{topic.title}</div>
