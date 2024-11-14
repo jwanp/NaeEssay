@@ -7,7 +7,7 @@ import Editor from '../../components/Editor/Editor';
 import { useQueryClient, useMutation } from 'react-query';
 import { Essay, clearEssay } from '@/lib/features/essay/essaySlice';
 import toast, { toastConfig } from 'react-simple-toasts';
-
+import { useSession } from 'next-auth/react';
 import 'react-simple-toasts/dist/style.css';
 import 'react-simple-toasts/dist/theme/failure.css';
 import 'react-simple-toasts/dist/theme/success.css';
@@ -21,10 +21,11 @@ toastConfig({
 });
 
 export default function Essays() {
+    let router = useRouter();
+    const { data: session } = useSession();
+
     const essay = useAppSelector((state) => state.essay);
     const dispatch = useAppDispatch();
-
-    let router = useRouter();
 
     useEffect(() => {
         if (essay.topic == '' || essay == undefined) {
@@ -59,20 +60,12 @@ export default function Essays() {
             onSuccess: (data) => {
                 toast(data.message, { theme: 'success' });
                 dispatch(changeEssayId({ essayId: data.essayId }));
-                queryClient.refetchQueries({
-                    predicate: (query) => {
-                        // Make sure the queryKey is properly typed
-                        const queryKey = query.queryKey[0];
-                        return (
-                            typeof queryKey === 'string' &&
-                            (queryKey.startsWith('essays') || queryKey.startsWith('topics'))
-                        );
-                    },
-                });
+                queryClient.refetchQueries('topics');
+                queryClient.refetchQueries('essays');
             },
             onError: (error: any) => {
                 const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-                toast(errorMessage);
+                toast(error);
             },
         }
     );

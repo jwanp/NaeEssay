@@ -21,7 +21,7 @@ interface Topic {
     title: string;
     date: Date;
     author: string | null | undefined;
-    authorName: string | null | undefined;
+    email: string | null | undefined;
     is_public: string;
 }
 
@@ -33,8 +33,8 @@ export default async function handler(request: NextApiRequest, response: NextApi
         requestBody = {
             title: request.body.title,
             is_public: request.body.is_public,
-            author: session.user?.email,
-            authorName: session.user?.name,
+            author: session.user?.name,
+            email: session.user?.email,
             date: new Date(),
         };
     } else {

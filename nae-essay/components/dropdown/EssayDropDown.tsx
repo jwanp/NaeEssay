@@ -33,7 +33,7 @@ export default function EssayDropDown() {
     const sort = useAppSelector((state) => state.essaySort);
     const dispatch = useAppDispatch();
     return (
-        <div className="w-[120px] ">
+        <div className="w-[120px] ml-[20px]">
             <Combobox
                 value={koreanSorts[sort.id - 1]}
                 onChange={(sortValue) => {

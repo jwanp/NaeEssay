@@ -13,7 +13,7 @@ import { EssayLike, EssayComment } from '@/lib/definitions';
 import { EssayContentType } from '@/lib/definitions';
 import { getDatePrintFormat } from '@/utils/string';
 
-import { LikeIcon, CommentIcon } from '@/components/Tables/Icons';
+import { LikeIcon, CommentIcon } from '@/components/Icons/Icons';
 import Content from './Content';
 
 toastConfig({

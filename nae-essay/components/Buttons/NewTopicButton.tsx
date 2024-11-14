@@ -1,11 +1,20 @@
 'use client';
 import { useState } from 'react';
-
+import { useSession } from 'next-auth/react';
 import NewTopicModal from '../Modals/NewTopicModal';
+import toast from 'react-simple-toasts';
 
 export default function NewTopicButton({ full }: { full: boolean }) {
+    const { data: session } = useSession();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const openModal = () => {
+        if (!session) {
+            toast('로그인 후에 주제를 만들 수 있습니다.');
+        } else {
+            setIsModalOpen(true);
+        }
+    };
     const closeModal = () => setIsModalOpen(false);
     return (
         <div>

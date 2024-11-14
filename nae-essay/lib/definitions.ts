@@ -15,9 +15,10 @@ export interface TopicType {
     _id: string;
     title: string;
     author: string;
+    email?: string;
     date: string;
-    bookmarks: unknown;
-    essays: unknown;
+    bookmark: { _id: string; topicId: string; email: string; date: string }[];
+    essay: unknown[];
     is_public: boolean;
     bookmarkCount: number;
     essayCount: number;
@@ -27,6 +28,7 @@ export interface QnAType {
     id: string;
     title: string;
     author: string;
+    email?: string;
     date: string;
     comments: unknown;
     likes: unknown;
@@ -45,6 +47,7 @@ export interface EssayType {
     topic: string;
     topicId: string;
     author: string;
+    email?: string;
     date: string;
     content: EssayContentType[];
     public: boolean;

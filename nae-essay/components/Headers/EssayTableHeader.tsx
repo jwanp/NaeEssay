@@ -5,11 +5,25 @@ import EssayDropDown from '@/components/dropdown/EssayDropDown';
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { chageTopic } from '@/lib/features/essay/essaySlice';
 import { useRouter } from 'next/navigation';
+import TopicBookmark from '../Buttons/TopicBookmark';
+import { useSearchParams } from 'next/navigation';
+
+import toast from 'react-simple-toasts';
+import { useSession } from 'next-auth/react';
+
 export default function EssayTableHeader({ topic, topicId }: { topic: string; topicId: string }) {
+    const { data: session } = useSession();
     const dispatch = useAppDispatch();
     const essayCount = useAppSelector((state) => state.essaySort.totalCount);
-    let router = useRouter();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const bookmarkId = searchParams?.get('bookmarkId');
+
     const clickHandler = () => {
+        if (!session) {
+            toast('글작성은 로그인 상태에서만 할 수 있습니다.');
+            return;
+        }
         dispatch(chageTopic({ value: topic, id: topicId }));
         router.push('/write');
     };
@@ -25,6 +39,7 @@ export default function EssayTableHeader({ topic, topicId }: { topic: string; to
 
                 <div className="hidden md:flex items-center">
                     {/* https://tailwindui.com/components/application-ui/forms/select-menus */}
+                    <TopicBookmark topicId={topicId} bookmarkId={bookmarkId} />
                     <EssayDropDown />
                     <button
                         className="w-[96px] shrink-0 px-3 bg-green-600 hover:bg-green-500 duration-300 rounded-2xl text-white ml-[40px] h-[48px]"

@@ -3,7 +3,7 @@
 import { EssayType } from '@/lib/definitions';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { PreviousIcon, NextIcon, LikeIcon, CommentIcon } from './Icons';
+import { PreviousIcon, NextIcon, LikeIcon, CommentIcon } from '../Icons/Icons';
 import EssaySearch from '../Search/EssaySearch';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';

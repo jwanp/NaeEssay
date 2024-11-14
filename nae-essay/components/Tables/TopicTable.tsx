@@ -4,7 +4,14 @@ import { TopicType } from '@/lib/definitions';
 import TopicSearch from '../Search/TopicSearch';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { DocumentIcon, FilledDocumentIcon, BookmarkIcon, FilledBookmarkIcon, PreviousIcon, NextIcon } from './Icons';
+import {
+    DocumentIcon,
+    FilledDocumentIcon,
+    BookmarkIcon,
+    FilledBookmarkIcon,
+    PreviousIcon,
+    NextIcon,
+} from '../Icons/Icons';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { getDatePrintFormat } from '@/utils/string';
@@ -83,7 +90,12 @@ export default function TopicTable() {
                                     {/* 전체 사이즈 */}
                                     <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                                         <Link
-                                            href={'topics/' + topic._id}
+                                            href={{
+                                                pathname: 'topics/' + topic._id,
+                                                query: {
+                                                    bookmarkId: topic.bookmark[0] && topic.bookmark[0]._id,
+                                                }, // Passing bookmark status as query param
+                                            }}
                                             className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                             <div className="truncate max-w-full">{topic.title}</div>
                                         </Link>
@@ -95,11 +107,11 @@ export default function TopicTable() {
                                         </div>
                                         <div className="content-center flex gap-5 w-[200px] text-[14px]">
                                             <div className="flex  content-center">
-                                                <DocumentIcon />
+                                                {topic.essay.length > 0 ? <FilledDocumentIcon /> : <DocumentIcon />}
                                                 <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                             </div>
                                             <div className="flex content-center">
-                                                <BookmarkIcon />
+                                                {topic.bookmark.length > 0 ? <FilledBookmarkIcon /> : <BookmarkIcon />}
                                                 <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
                                             </div>
                                         </div>
@@ -110,7 +122,10 @@ export default function TopicTable() {
                                             {getDatePrintFormat(topic.date)}
                                         </div>
                                         <Link
-                                            href={'topics/' + topic._id}
+                                            href={{
+                                                pathname: 'topics/' + topic._id,
+                                                query: { bookmarkId: topic.bookmark[0] && topic.bookmark[0]._id }, // Passing bookmark status as query param
+                                            }}
                                             className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                             <div className="truncate max-w-full">{topic.title}</div>
                                         </Link>
@@ -120,11 +135,15 @@ export default function TopicTable() {
                                             </div>
                                             <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
                                                 <div className="flex  content-center">
-                                                    <DocumentIcon />
+                                                    {topic.essay.length > 0 ? <FilledDocumentIcon /> : <DocumentIcon />}
                                                     <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                                 </div>
                                                 <div className="flex content-center">
-                                                    <BookmarkIcon />
+                                                    {topic.bookmark.length > 0 ? (
+                                                        <FilledBookmarkIcon />
+                                                    ) : (
+                                                        <BookmarkIcon />
+                                                    )}
                                                     <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
                                                 </div>
                                             </div>

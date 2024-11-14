@@ -2,7 +2,7 @@
 
 import { QnAType } from '@/lib/definitions';
 import QnASearch from '../Search/QnASearch';
-import { PreviousIcon, NextIcon, CommentIcon, FilledCommentIcon, LikeIcon, FilledLikeIcon } from './Icons';
+import { PreviousIcon, NextIcon, CommentIcon, FilledCommentIcon, LikeIcon, FilledLikeIcon } from '../Icons/Icons';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 

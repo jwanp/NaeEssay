@@ -11,7 +11,7 @@ import 'react-simple-toasts/dist/theme/success.css';
 
 toastConfig({
     theme: 'failure',
-    duration: 5000,
+    duration: 1000,
     position: 'top-right',
     clickClosable: true,
     maxVisibleToasts: 3,

@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google';
 
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
-
+import SessionWrapper from './SessionProvider';
 import StoreProvider from './StoreProvider';
 import NavBar from '@/components/navbar/NavBar';
 
@@ -28,12 +28,14 @@ export default async function RootLayout({
         <html lang="en">
             <body className={inter.className}>
                 <div className="bg-[#f0f0f0] mt-10 min-h-screen">
-                    <QueryProvider>
-                        <StoreProvider>
-                            <NavBar session={session}></NavBar>
-                            {children}
-                        </StoreProvider>
-                    </QueryProvider>
+                    <SessionWrapper>
+                        <QueryProvider>
+                            <StoreProvider>
+                                <NavBar session={session}></NavBar>
+                                {children}
+                            </StoreProvider>
+                        </QueryProvider>
+                    </SessionWrapper>
                 </div>
             </body>
         </html>
