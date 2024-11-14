@@ -3,7 +3,7 @@
 import { EssayType } from '@/lib/definitions';
 import EssayDropDown from '@/components/dropdown/EssayDropDown';
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
-import { chageTopic } from '@/lib/features/essay/essaySlice';
+import { chageTopic, clearEssay } from '@/lib/features/essay/essaySlice';
 import { useRouter } from 'next/navigation';
 import TopicBookmark from '../Buttons/TopicBookmark';
 import { useSearchParams } from 'next/navigation';
@@ -24,6 +24,7 @@ export default function EssayTableHeader({ topic, topicId }: { topic: string; to
             toast('글작성은 로그인 상태에서만 할 수 있습니다.');
             return;
         }
+        dispatch(clearEssay());
         dispatch(chageTopic({ value: topic, id: topicId }));
         router.push('/write');
     };

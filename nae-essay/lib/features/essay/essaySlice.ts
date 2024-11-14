@@ -1,23 +1,44 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { EditorState } from 'lexical';
-import { EssayType, EssayContentType } from '@/lib/definitions';
-interface Outline {
+
+export interface Outline {
     outline: string;
     content?: string;
     text: string;
     htmlString?: string;
 }
 
+export interface Like {
+    _id: string;
+    email: string;
+    essayId: string;
+    date: string;
+}
+
+export interface Comment {
+    _id: string;
+    email: string;
+    author: string;
+    essayId: string;
+    date: string;
+    content: string;
+}
 export interface Essay {
-    essayId: string | null;
+    _id: string | null;
     topic: string;
     topicId: string;
     content: Outline[];
     public: boolean;
+    email?: string;
+    author?: string;
+    date?: string;
+    like?: Like[];
+    comment?: Comment[];
+    likeCount?: number;
+    commentCount?: number;
 }
 
 const initialState: Essay = {
-    essayId: null,
+    _id: null,
     topic: '',
     topicId: '',
     content: [
@@ -58,10 +79,21 @@ export const EssaySlice = createSlice({
             state.content.splice(action.payload.idx, 1);
         },
         changeEssayId(state, action: PayloadAction<{ essayId: string }>) {
-            state.essayId = action.payload.essayId;
+            state._id = action.payload.essayId;
         },
         clearEssay(state) {
             return initialState;
+        },
+        changeEssay(state, action: PayloadAction<{ essay: Essay }>) {
+            return action.payload.essay;
+        },
+        increaseLikeCount(state) {
+            if (state.likeCount == undefined) return undefined;
+            state.likeCount = state.likeCount + 1;
+        },
+        decreaseLikeCount(state) {
+            if (state.likeCount == undefined) return undefined;
+            state.likeCount = state.likeCount - 1;
         },
     },
 });
@@ -76,4 +108,7 @@ export const {
     changeEssayId,
     saveHtmlContent,
     clearEssay,
+    changeEssay,
+    increaseLikeCount,
+    decreaseLikeCount,
 } = EssaySlice.actions;

@@ -47,19 +47,40 @@ export function FilledCommentIcon() {
         </svg>
     );
 }
-
+// <-- License: PD. Made by linea-io: https://github.com/linea-io/Linea-Iconset -->
 export function LikeIcon() {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" id="heart" width="17" x="0" y="0" viewBox="0 0 512 512" fill="#03C03C">
-            <path d="M349.6 64c-36.4 0-70.718 16.742-93.6 43.947C233.117 80.742 198.8 64 162.4 64 97.918 64 48 114.221 48 179.095c0 79.516 70.718 143.348 177.836 241.694L256 448l30.164-27.211C393.281 322.442 464 258.61 464 179.095 464 114.221 414.082 64 349.6 64zm-80.764 329.257l-4.219 3.873-8.617 7.773-8.616-7.772-4.214-3.869c-50.418-46.282-93.961-86.254-122.746-121.994C92.467 236.555 80 208.128 80 179.095c0-22.865 8.422-43.931 23.715-59.316C118.957 104.445 139.798 96 162.4 96c26.134 0 51.97 12.167 69.11 32.545L256 157.661l24.489-29.116C297.63 108.167 323.465 96 349.6 96c22.603 0 43.443 8.445 58.686 23.778C423.578 135.164 432 156.229 432 179.095c0 29.033-12.467 57.459-40.422 92.171-28.784 35.74-72.325 75.709-122.742 121.991z"></path>
+        <svg
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+            width="15px"
+            viewBox="0 0 64 64"
+            color="#03C03C"
+            enableBackground="new 0 0 64 64">
+            <path
+                fill="none"
+                stroke="#03C03C"
+                strokeWidth="2"
+                strokeMiterlimit="10"
+                d="M1,21c0,20,31,38,31,38s31-18,31-38
+       c0-8.285-6-16-15-16c-8.285,0-16,5.715-16,14c0-8.285-7.715-14-16-14C7,5,1,12.715,1,21z"
+            />
         </svg>
     );
 }
-
-export function FilledLikeIcon() {
+// <!-- License: MIT. Made by halfmage: https://github.com/halfmage/majesticons -->
+export function FilledLikeIcon({ fill, stroke }: { fill?: string; stroke?: string }) {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="15" viewBox="0 0 50 50" fill="#03C03C">
-            <path d="M896 1664q-26 0-44-18l-624-602q-10-8-27.5-26T145 952.5 77 855 23.5 734 0 596q0-220 127-344t351-124q62 0 126.5 21.5t120 58T820 276t76 68q36-36 76-68t95.5-68.5 120-58T1314 128q224 0 351 124t127 344q0 221-229 450l-623 600q-18 18-44 18z"></path>
+        <svg width="17px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <path
+                fill={fill ? fill : '#03C03C'}
+                stroke={stroke ? stroke : '#03C03C'}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M17 4c-3.2 0-5 2.667-5 4 0-1.333-1.8-4-5-4S3 6.667 3 8c0 7 9 12 9 12s9-5 9-12c0-1.333-.8-4-4-4z"
+            />
         </svg>
     );
 }

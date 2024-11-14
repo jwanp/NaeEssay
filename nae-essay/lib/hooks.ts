@@ -10,27 +10,6 @@ export const useAppStore = useStore.withTypes<AppStore>();
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-// export const useWatchId = () => {
-//     const location = useLocation();
-//     const [currentId, setCurrentId] = useState<string | null>(null);
-
-//     useEffect(() => {
-//         // Extract the hash from the location (e.g., "#section-2")
-//         const hash = location.hash;
-
-//         if (hash) {
-//             // The ID will be everything after the '#' (e.g., "section-2")
-//             setCurrentId(hash.substring(1)); // Remove the '#' character
-//         }
-//     }, [location]); // Re-run the effect whenever the location changes
-
-//     return currentId;
-// };
-
-// export default useWatchId;
-
-import { useRouter } from 'next/router';
-
 interface QueryParamProps {
     keyName: string;
 }

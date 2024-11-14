@@ -5,7 +5,10 @@ export function validateUrl(url: string): boolean {
     return url === 'https://' || urlRegExp.test(url);
 }
 
-export function getDatePrintFormat(date_string: string) {
+export function getDatePrintFormat(date_string: string | undefined) {
+    if (!date_string) {
+        return null;
+    }
     const dateObject: Date = new Date(date_string);
     const year: number = dateObject.getFullYear();
     const month: number = dateObject.getMonth() + 1;

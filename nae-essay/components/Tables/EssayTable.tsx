@@ -3,7 +3,7 @@
 import { EssayType } from '@/lib/definitions';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { PreviousIcon, NextIcon, LikeIcon, CommentIcon } from '../Icons/Icons';
+import { PreviousIcon, NextIcon, LikeIcon, CommentIcon, FilledLikeIcon } from '../Icons/Icons';
 import EssaySearch from '../Search/EssaySearch';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
@@ -12,6 +12,7 @@ import { changeEssayCount } from '@/lib/features/sort/SortSlice';
 import { useQuery } from 'react-query';
 
 import { getDatePrintFormat } from '@/utils/string';
+import { changeEssay } from '@/lib/features/essay/essaySlice';
 
 export default function EssayTable({ id }: { id: string }): React.ReactElement {
     const dispatch = useAppDispatch();
@@ -82,6 +83,9 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                     {/* 전체 사이즈 */}
                                     <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                                         <Link
+                                            onClick={() => {
+                                                dispatch(changeEssay({ essay: essay }));
+                                            }}
                                             href={'/essay/' + essay._id}
                                             className="mr-4 content-center flex-1 min-w-0">
                                             <h4 className="truncate max-w-full font-normal text-base  text-black">
@@ -103,7 +107,7 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                                 <div className="ml-[6px] content-center">{essay.commentCount}</div>
                                             </div>
                                             <div className="flex content-center">
-                                                <LikeIcon />
+                                                {essay.like && essay.like[0]?._id ? <FilledLikeIcon /> : <LikeIcon />}
                                                 <div className="ml-[6px] content-center">{essay.likeCount}</div>
                                             </div>
                                         </div>
@@ -116,6 +120,9 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                             {getDatePrintFormat(essay.date)}
                                         </div>
                                         <Link
+                                            onClick={() => {
+                                                dispatch(changeEssay({ essay: essay }));
+                                            }}
                                             href={'/essay/' + essay._id}
                                             className="mr-4 content-center flex-1 min-w-0">
                                             <h4 className="truncate max-w-full font-normal text-base  text-black">
@@ -133,7 +140,11 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                                     <div className="ml-[6px] content-center">{essay.commentCount}</div>
                                                 </div>
                                                 <div className="flex content-center">
-                                                    <LikeIcon />
+                                                    {essay.like && essay.like[0]?._id ? (
+                                                        <FilledLikeIcon />
+                                                    ) : (
+                                                        <LikeIcon />
+                                                    )}
                                                     <div className="ml-[6px] content-center">{essay.likeCount}</div>
                                                 </div>
                                             </div>

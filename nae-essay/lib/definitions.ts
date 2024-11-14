@@ -1,10 +1,6 @@
 import { EditorState } from 'lexical';
 import { ObjectId } from 'mongodb';
 // 공유하는 타입들 지정해 두는 파일
-export interface Outline {
-    outline: string;
-    content: string;
-}
 
 export interface OnChangePluginProps {
     idx: number;
@@ -36,38 +32,44 @@ export interface QnAType {
     likeCount: number;
 }
 
-export interface EssayContentType {
-    outline: string;
-    text: string;
-    htmlString: string;
-}
+import { Essay, Outline, Like, Comment } from './features/essay/essaySlice';
+export type EssayComment = Comment;
+export type EssayLike = Like;
+export type EssayContentType = Outline;
+export type EssayType = Essay;
+// export interface EssayContentType {
+//     outline: string;
+//     content?: string;
+//     text: string;
+//     htmlString?: string;
+// }
+// export interface EssayType {
+//     _id: string;
+//     topic: string;
+//     topicId: string;
+//     author: string;
+//     email?: string;
+//     date: string;
+//     content: EssayContentType[];
+//     public: boolean;
+//     comment?: EssayComment[];
+//     like?: EssayLike[];
 
-export interface EssayType {
-    _id: string;
-    topic: string;
-    topicId: string;
-    author: string;
-    email?: string;
-    date: string;
-    content: EssayContentType[];
-    public: boolean;
-    comments?: unknown;
-    likes?: unknown;
-    commentCount?: number;
-    likeCount?: number;
-}
+//     commentCount?: number;
+//     likeCount?: number;
+// }
 
-export interface EssayLike {
-    _id?: ObjectId;
-    essayId: ObjectId;
-    userId: ObjectId;
-    likedAt: Date;
-}
+// export interface EssayLike {
+//     _id?: ObjectId;
+//     essayId: ObjectId;
+//     email: ObjectId;
+//     date: Date;
+// }
 
-export interface EssayComment {
-    _id?: ObjectId;
-    essayId: ObjectId;
-    author: string;
-    content: string;
-    date: Date;
-}
+// export interface EssayComment {
+//     _id?: ObjectId;
+//     essayId: ObjectId;
+//     email: string;
+//     content: string;
+//     date: Date;
+// }
