@@ -43,7 +43,7 @@ export default function SideBar() {
                             <li className="flex mb-2" key={i}>
                                 {editTopic == Edit.Delete && (
                                     <button
-                                        className="flex items-center p-2 bg-green-400 rounded-s-md shadow-md text-white hover:bg-green-300"
+                                        className="flex items-center p-2 bg-teal-500 rounded-s-md shadow-md text-white hover:bg-teal-400"
                                         onClick={() => {
                                             dispatch(deleteOutline({ idx: i }));
                                         }}>
@@ -51,7 +51,7 @@ export default function SideBar() {
                                     </button>
                                 )}
                                 {editTopic == Edit.ReArrange && (
-                                    <button className="flex items-center p-2 bg-green-400 rounded-s-md shadow-md text-white hover:bg-gren-300">
+                                    <button className="flex items-center p-2 bg-teal-500 rounded-s-md shadow-md text-white hover:bg-teal-400">
                                         <RxHamburgerMenu></RxHamburgerMenu>
                                     </button>
                                 )}
@@ -73,7 +73,7 @@ export default function SideBar() {
                     })}
 
                     <button
-                        className="w-full bg-green-400 text-white p-1 hover:bg-green-300 duration-300"
+                        className="w-full bg-teal-500 text-white p-1 hover:bg-teal-400 duration-300"
                         onClick={() => {
                             dispatch(addOutline());
                         }}>

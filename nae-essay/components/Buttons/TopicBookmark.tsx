@@ -74,7 +74,7 @@ export default function TopicBookmark({ topicId, bookmarkId: initialBookmarkId }
     return (
         <div
             onClick={clickHandler}
-            className="hover:border-green-400 hover:text-green-500 border border-green-500 cursor-pointer w-[100px] items-center flex justify-center bg-gray-200 rounded-md h-[48px] text-sm text-green-600">
+            className="hover:border-teal-400 hover:text-teal-500 border border-teal-500 cursor-pointer w-[100px] items-center flex justify-center bg-gray-200 rounded-md h-[48px] text-sm text-teal-600">
             {isBookmarked ? <FilledBookmarkIcon /> : <BookmarkIcon />}
             <p className="px-1">북마크</p>
         </div>

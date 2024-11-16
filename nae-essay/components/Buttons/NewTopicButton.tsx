@@ -22,14 +22,14 @@ export default function NewTopicButton({ full }: { full: boolean }) {
                 <div className="px-4 py-[20px]">
                     <button
                         onClick={openModal}
-                        className="w-full px-3 bg-green-600 hover:bg-green-500 duration-300 rounded-3xl text-white h-[48px]">
+                        className="w-full px-3 bg-teal-600 hover:bg-teal-500 duration-300 rounded-3xl text-white h-[48px]">
                         주제 만들기
                     </button>
                 </div>
             ) : (
                 <button
                     onClick={openModal}
-                    className="px-3 bg-green-600 hover:bg-green-500 duration-300 rounded-2xl text-white ml-[40px] h-[48px]">
+                    className="px-3 bg-teal-600 hover:bg-teal-500 duration-300 rounded-2xl text-white ml-[40px] h-[48px]">
                     주제 만들기
                 </button>
             )}

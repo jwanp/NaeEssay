@@ -38,7 +38,7 @@ export default function Header() {
                 </p>
                 <p className="flex gap-1">
                     <CommentIcon />
-                    {essay.commnetCount ? essay.commnetCount : 0}
+                    {essay.commentCount ? essay.commentCount : 0}
                 </p>
             </div>
         </div>

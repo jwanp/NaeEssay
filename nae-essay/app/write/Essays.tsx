@@ -111,7 +111,7 @@ export default function Essays() {
                     <button
                         className="py-2 md:py-0 my-1 md:my-0 rounded-2xl w-full md:w-auto  md:ml-2 px-2 md:rounded-md text-black bg-white md:h-8  hover:text-gray-400 duration-300"
                         onClick={handleSave}>
-                        {essay.essayId ? 'Update' : 'Save'}
+                        {essay._id ? 'Update' : 'Save'}
                     </button>
                 </div>
                 <div>

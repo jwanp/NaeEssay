@@ -33,7 +33,7 @@ export default function EssayTableHeader({ topic, topicId }: { topic: string; to
             <div className="flex justify-between px-[40px] py-[20px] ">
                 <div className="flex items-center mr-5">
                     <h1 className=" font-medium text-xl ">{topic}</h1>
-                    <h4 className="hidden md:block shrink-0 font-medium text-base ml-6 text-green-600">
+                    <h4 className="hidden md:block shrink-0 font-medium text-base ml-6 text-teal-600">
                         {essayCount}개 에세이
                     </h4>
                 </div>
@@ -43,19 +43,19 @@ export default function EssayTableHeader({ topic, topicId }: { topic: string; to
                     <TopicBookmark topicId={topicId} bookmarkId={bookmarkId} />
                     <EssayDropDown />
                     <button
-                        className="w-[96px] shrink-0 px-3 bg-green-600 hover:bg-green-500 duration-300 rounded-2xl text-white ml-[40px] h-[48px]"
+                        className="w-[96px] shrink-0 px-3 bg-teal-600 hover:bg-teal-500 duration-300 rounded-2xl text-white ml-[40px] h-[48px]"
                         onClick={clickHandler}>
                         글 쓰기
                     </button>
                 </div>
             </div>
             <div className="md:hidden flex justify-between items-center px-[40px] ">
-                <h4 className="shrink-0 font-medium text-base text-green-600">{essayCount}개 에세이</h4>
+                <h4 className="shrink-0 font-medium text-base text-teal-600">{essayCount}개 에세이</h4>
                 <EssayDropDown />
             </div>
             <div className="px-4 md:hidden py-[20px]">
                 <button
-                    className="w-full shrink-0 px-3 bg-green-600 hover:bg-green-500 duration-300 rounded-3xl text-white h-[48px]"
+                    className="w-full shrink-0 px-3 bg-teal-600 hover:bg-teal-500 duration-300 rounded-3xl text-white h-[48px]"
                     onClick={clickHandler}>
                     글 쓰기
                 </button>

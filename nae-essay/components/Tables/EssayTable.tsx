@@ -174,7 +174,7 @@ export default function EssayTable({ id }: { id: string }): React.ReactElement {
                                     <li key={page}>
                                         <button
                                             aria-current="page"
-                                            className="z-10 flex items-center justify-center px-4 h-10 leading-tight text-green-600 border border-green-300 bg-green-50 hover:bg-green-100 hover:text-green-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
+                                            className="z-10 flex items-center justify-center px-4 h-10 leading-tight text-teal-600 border border-teal-300 bg-teal-50 hover:bg-teal-100 hover:text-teal-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
                                             {page + 1}
                                         </button>
                                     </li>

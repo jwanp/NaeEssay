@@ -105,12 +105,12 @@ export default function Content() {
         <div className="md:flex mx-auto space-y-4 md:space-y-0 md:space-x-6">
             {/* Mobile Sidebar */}
             <aside className="md:hidden w-full transition-all duration-500 ease-in-out rounded-sm overflow-hidden">
-                <ul className="border-l-2 border-green-300 p-4 space-y-2 text-gray-700 text-center md:text-start">
+                <ul className="border-l-2 border-teal-500 p-4 space-y-2 text-gray-700 text-center md:text-start">
                     {essayContent &&
                         essayContent.map((content: EssayContentType, idx: number) => {
                             if (activeIdx == idx) {
                                 return (
-                                    <li key={idx} className="text-green-500 font-semibold truncate">
+                                    <li key={idx} className="text-teal-600 font-semibold truncate">
                                         {' '}
                                         <a href={`#${content.outline}`}>{content.outline}</a>
                                     </li>
@@ -151,13 +151,17 @@ export default function Content() {
                     ref={buttonRef}
                     onClick={likeHandler}
                     type="button"
-                    className="bg-green-400 mx-auto flex gap-3 items-center rounded px-6 pb-1.5 pt-1.5 text-xs uppercase leading-normal shadow-lg transition duration-150 ease-in-out 
-           hover:bg-green-300 hover:shadow-md 
-           focus:bg-green-300 focus:shadow-md focus:outline-none focus:ring-0 
-           active:bg-green-600 active:shadow-md 
+                    className="bg-teal-400 mx-auto flex gap-3 items-center rounded px-6 pb-1.5 pt-1.5 text-xs uppercase leading-normal shadow-lg transition duration-150 ease-in-out 
+           hover:bg-teal-300 hover:shadow-md 
+            focus:shadow-md focus:outline-none focus:ring-0 
+            active:shadow-md 
            motion-reduce:transition-none 
            dark:shadow-black/30 dark:hover:shadow-md dark:focus:shadow-md dark:active:shadow-md">
-                    {Liked ? <FilledLikeIcon /> : <FilledLikeIcon fill="white" stroke="white" />}
+                    {Liked ? (
+                        <FilledLikeIcon fill="teal" stroke="teal" />
+                    ) : (
+                        <FilledLikeIcon fill="white" stroke="white" />
+                    )}
 
                     <p className="text-white text-[15px]">{essay.likeCount}</p>
                 </button>
@@ -165,12 +169,12 @@ export default function Content() {
 
             {/* Desktop Sidebar */}
             <aside className="md:self-start hidden md:block md:sticky md:top-[100px] md:w-auto md:max-w-[300px] transition-all duration-500 ease-in-out rounded-sm overflow-hidden">
-                <ul className="border-l-2 border-green-300 p-4 space-y-2 text-gray-700 text-center md:text-start">
+                <ul className="border-l-2 border-teal-500 p-4 space-y-2 text-gray-700 text-center md:text-start">
                     {essayContent &&
                         essayContent.map((content: EssayContentType, idx: number) => {
                             if (activeIdx == idx) {
                                 return (
-                                    <li key={idx} className="text-green-500 font-semibold truncate">
+                                    <li key={idx} className="text-teal-600 font-semibold truncate">
                                         {' '}
                                         <a href={`#${content.outline}`}>{content.outline}</a>
                                     </li>

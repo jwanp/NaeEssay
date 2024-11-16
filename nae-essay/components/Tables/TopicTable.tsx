@@ -92,9 +92,10 @@ export default function TopicTable() {
                                         <Link
                                             href={{
                                                 pathname: 'topics/' + topic._id,
-                                                query: topic.bookmark[0]
-                                                    ? { bookmarkId: topic.bookmark[0]._id }
-                                                    : undefined, // Passing bookmark status as query param
+                                                query:
+                                                    topic.bookmark && topic.bookmark[0]
+                                                        ? { bookmarkId: topic.bookmark[0]._id }
+                                                        : undefined, // Passing bookmark status as query param
                                             }}
                                             className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                             <div className="truncate max-w-full">{topic.title}</div>
@@ -107,11 +108,19 @@ export default function TopicTable() {
                                         </div>
                                         <div className="content-center flex gap-5 w-[200px] text-[14px]">
                                             <div className="flex  content-center">
-                                                {topic.essay.length > 0 ? <FilledDocumentIcon /> : <DocumentIcon />}
+                                                {topic.essay && topic.essay.length > 0 ? (
+                                                    <FilledDocumentIcon />
+                                                ) : (
+                                                    <DocumentIcon />
+                                                )}
                                                 <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                             </div>
                                             <div className="flex content-center">
-                                                {topic.bookmark.length > 0 ? <FilledBookmarkIcon /> : <BookmarkIcon />}
+                                                {topic.bookmark && topic.bookmark.length > 0 ? (
+                                                    <FilledBookmarkIcon />
+                                                ) : (
+                                                    <BookmarkIcon />
+                                                )}
                                                 <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
                                             </div>
                                         </div>
@@ -124,9 +133,10 @@ export default function TopicTable() {
                                         <Link
                                             href={{
                                                 pathname: 'topics/' + topic._id,
-                                                query: topic.bookmark[0]
-                                                    ? { bookmarkId: topic.bookmark[0]._id }
-                                                    : undefined, // Passing bookmark status as query param
+                                                query:
+                                                    topic.bookmark && topic.bookmark[0]
+                                                        ? { bookmarkId: topic.bookmark[0]._id }
+                                                        : undefined, // Passing bookmark status as query param
                                             }}
                                             className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
                                             <div className="truncate max-w-full">{topic.title}</div>
@@ -137,11 +147,15 @@ export default function TopicTable() {
                                             </div>
                                             <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
                                                 <div className="flex  content-center">
-                                                    {topic.essay.length > 0 ? <FilledDocumentIcon /> : <DocumentIcon />}
+                                                    {topic.essay && topic.essay.length > 0 ? (
+                                                        <FilledDocumentIcon />
+                                                    ) : (
+                                                        <DocumentIcon />
+                                                    )}
                                                     <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                                 </div>
                                                 <div className="flex content-center">
-                                                    {topic.bookmark.length > 0 ? (
+                                                    {topic.bookmark && topic.bookmark.length > 0 ? (
                                                         <FilledBookmarkIcon />
                                                     ) : (
                                                         <BookmarkIcon />
@@ -174,7 +188,7 @@ export default function TopicTable() {
                                     <li key={page}>
                                         <button
                                             aria-current="page"
-                                            className="z-10 flex items-center justify-center px-4 h-10 leading-tight text-green-600 border border-green-300 bg-green-50 hover:bg-green-100 hover:text-green-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
+                                            className="z-10 flex items-center justify-center px-4 h-10 leading-tight text-teal-600 border border-teal-300 bg-teal-50 hover:bg-teal-100 hover:text-teal-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
                                             {page + 1}
                                         </button>
                                     </li>
