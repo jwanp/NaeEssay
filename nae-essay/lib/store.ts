@@ -4,6 +4,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { NavSlice } from '../components/navbar/navSlice';
 import { EssaySlice } from './features/essay/essaySlice';
 import { TopicSortSlice, EssaySortSlice, QnASortSlice } from './features/sort/SortSlice';
+
 export const makeStore = () => {
     return configureStore({
         reducer: {

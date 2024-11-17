@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import toast from 'react-simple-toasts';
 import { useQueryClient } from 'react-query';
 import { increaseLikeCount, decreaseLikeCount } from '@/lib/features/essay/essaySlice';
+
 export default function Content() {
     const dispatch = useAppDispatch();
     const essay = useAppSelector((state) => state.essay);

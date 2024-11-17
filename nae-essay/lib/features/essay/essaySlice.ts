@@ -16,11 +16,11 @@ export interface Like {
 
 export interface Comment {
     _id: string;
+    username: string;
     email: string;
-    author: string;
-    essayId: string;
-    date: string;
     content: string;
+    date: string;
+    edited: boolean;
 }
 export interface Essay {
     _id: string | null;
@@ -28,13 +28,13 @@ export interface Essay {
     topicId: string;
     content: Outline[];
     public: boolean;
-    email?: string;
-    author?: string;
-    date?: string;
-    like?: Like[];
-    comment?: Comment[];
-    likeCount?: number;
-    commentCount?: number;
+    email: string;
+    author: string;
+    date: string;
+    like: Like[];
+    comment: Comment[];
+    likeCount: number;
+    commentCount: number;
 }
 
 const initialState: Essay = {
@@ -49,6 +49,13 @@ const initialState: Essay = {
         },
     ],
     public: true,
+    email: '',
+    author: '',
+    date: '',
+    like: [],
+    comment: [],
+    likeCount: 0,
+    commentCount: 0,
 };
 
 export const EssaySlice = createSlice({
@@ -95,6 +102,23 @@ export const EssaySlice = createSlice({
             if (state.likeCount == undefined) return undefined;
             state.likeCount = state.likeCount - 1;
         },
+        setEssayComments(state, action: PayloadAction<{ value: Comment[] }>) {
+            state.comment = action.payload.value;
+        },
+        changeEssayComment(state, action: PayloadAction<{ idx: number; value: Comment }>) {
+            state.comment[action.payload.idx] = action.payload.value;
+        },
+        clearEssayComments(state) {
+            return initialState;
+        },
+        deleteEssayComment(state, action: PayloadAction<{ idx: number }>) {
+            const commentCopy: Comment[] = [...state.comment];
+            commentCopy.splice(action.payload.idx, 1);
+            state.comment = commentCopy;
+        },
+        pushEssayComment(state, action: PayloadAction<{ value: Comment }>) {
+            state.comment.push(action.payload.value);
+        },
     },
 });
 
@@ -111,4 +135,9 @@ export const {
     changeEssay,
     increaseLikeCount,
     decreaseLikeCount,
+    setEssayComments,
+    changeEssayComment,
+    clearEssayComments,
+    deleteEssayComment,
+    pushEssayComment,
 } = EssaySlice.actions;

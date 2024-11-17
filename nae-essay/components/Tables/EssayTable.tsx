@@ -13,7 +13,7 @@ import { useQuery } from 'react-query';
 
 import { getDatePrintFormat } from '@/utils/string';
 import { changeEssay } from '@/lib/features/essay/essaySlice';
-
+import { setEssayComments } from '@/lib/features/essay/essaySlice';
 export default function EssayTable({ id }: { id: string }): React.ReactElement {
     const dispatch = useAppDispatch();
 

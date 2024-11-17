@@ -21,7 +21,6 @@ toastConfig({
 
 export default function Header() {
     const essay = useAppSelector((state) => state.essay);
-    console.log(essay);
     if (essay == null || essay == undefined || essay.topic == '') {
         toast('잘못된 요청입니다.');
         redirect('/topics');

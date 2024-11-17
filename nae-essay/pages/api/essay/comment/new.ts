@@ -5,10 +5,13 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]';
 import { ObjectId } from 'mongodb';
 
-interface EssayLike {
+interface EssayComment {
     email: string;
+    username: string;
     essayId: string;
     date: Date;
+    content: string;
+    edited: boolean;
 }
 
 interface requestBody {
@@ -17,7 +20,7 @@ interface requestBody {
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
     let session = await getServerSession(request, response, authOptions);
-    let requestBody: EssayLike;
+    let requestBody: EssayComment;
 
     if (request.method == 'POST' && request.body) {
         request.body.essayId = new ObjectId(request.body.essayId);
@@ -25,11 +28,14 @@ export default async function handler(request: NextApiRequest, response: NextApi
         return response.status(500).json({ message: '에세이 아이디가 비었습니다.' });
     }
 
-    if (session && session.user && session.user.email) {
+    if (session && session.user && session.user.email && session.user.name) {
         requestBody = {
-            essayId: request.body.essayId,
             email: session.user.email,
+            username: session.user.name,
+            essayId: request.body.essayId,
             date: new Date(),
+            content: request.body.content,
+            edited: false,
         };
     } else {
         return response.status(500).json({ message: '로그인 하지 않았습니다.' });
@@ -40,20 +46,13 @@ export default async function handler(request: NextApiRequest, response: NextApi
         let result;
         let insertedId: string | undefined = undefined;
 
-        //이미 좋아요 한경우
-        const isLikeed = await db
-            .collection('essay_like')
-            .findOne({ email: session.user.email, essayId: request.body.essayId });
-        if (isLikeed) {
-            return response.status(500).json({ message: '이미 좋아요를 눌렀습니다.' });
-        }
-        result = await db.collection('essay_like').insertOne({ ...requestBody });
+        result = await db.collection('essay_comment').insertOne({ ...requestBody });
         insertedId = result.insertedId.toString();
 
         if (insertedId) {
-            return response.status(200).json({ message: '좋아요 완료', likeId: insertedId });
+            return response.status(200).json({ _id: insertedId, ...requestBody });
         } else {
-            return response.status(500).json({ message: '좋아요 실패' });
+            return response.status(500).json({ message: '댓글 작성 실패' });
         }
     } catch (error) {
         return response.status(500).json({ message: 'DB 에러 발생' });
