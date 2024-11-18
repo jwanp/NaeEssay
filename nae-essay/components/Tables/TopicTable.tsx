@@ -93,8 +93,8 @@ export default function TopicTable() {
                                             href={{
                                                 pathname: 'topics/' + topic._id,
                                                 query:
-                                                    topic.bookmark && topic.bookmark[0]
-                                                        ? { bookmarkId: topic.bookmark[0]._id }
+                                                    topic.myBookmarkIds && topic.myBookmarkIds[0]
+                                                        ? { bookmarkId: topic.myBookmarkIds[0] }
                                                         : undefined, // Passing bookmark status as query param
                                             }}
                                             className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
@@ -108,7 +108,7 @@ export default function TopicTable() {
                                         </div>
                                         <div className="content-center flex gap-5 w-[200px] text-[14px]">
                                             <div className="flex  content-center">
-                                                {topic.essay && topic.essay.length > 0 ? (
+                                                {topic.myEssayCount && topic.myEssayCount > 0 ? (
                                                     <FilledDocumentIcon />
                                                 ) : (
                                                     <DocumentIcon />
@@ -116,7 +116,7 @@ export default function TopicTable() {
                                                 <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                             </div>
                                             <div className="flex content-center">
-                                                {topic.bookmark && topic.bookmark.length > 0 ? (
+                                                {topic.myBookmarkIds && topic.myBookmarkIds.length > 0 ? (
                                                     <FilledBookmarkIcon />
                                                 ) : (
                                                     <BookmarkIcon />
@@ -134,8 +134,8 @@ export default function TopicTable() {
                                             href={{
                                                 pathname: 'topics/' + topic._id,
                                                 query:
-                                                    topic.bookmark && topic.bookmark[0]
-                                                        ? { bookmarkId: topic.bookmark[0]._id }
+                                                    topic.myBookmarkIds && topic.myBookmarkIds[0]
+                                                        ? { bookmarkId: topic.myBookmarkIds[0] }
                                                         : undefined, // Passing bookmark status as query param
                                             }}
                                             className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
@@ -147,7 +147,7 @@ export default function TopicTable() {
                                             </div>
                                             <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
                                                 <div className="flex  content-center">
-                                                    {topic.essay && topic.essay.length > 0 ? (
+                                                    {topic.myEssayCount && topic.myEssayCount > 0 ? (
                                                         <FilledDocumentIcon />
                                                     ) : (
                                                         <DocumentIcon />
@@ -155,7 +155,7 @@ export default function TopicTable() {
                                                     <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                                 </div>
                                                 <div className="flex content-center">
-                                                    {topic.bookmark && topic.bookmark.length > 0 ? (
+                                                    {topic.myBookmarkIds && topic.myBookmarkIds.length > 0 ? (
                                                         <FilledBookmarkIcon />
                                                     ) : (
                                                         <BookmarkIcon />

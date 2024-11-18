@@ -12,12 +12,12 @@ export interface TopicType {
     title: string;
     author: string;
     email?: string;
-    date: string;
-    bookmark: { _id: string; topicId: string; email: string; date: string }[];
-    essay: unknown[];
-    is_public: boolean;
     bookmarkCount: number;
+    date: string;
+    myEssayCount: number | null;
     essayCount: number;
+    is_public: boolean;
+    myBookmarkIds: null | string[];
 }
 
 export interface QnAType {
@@ -37,39 +37,3 @@ export type EssayComment = Comment;
 export type EssayLike = Like;
 export type EssayContentType = Outline;
 export type EssayType = Essay;
-// export interface EssayContentType {
-//     outline: string;
-//     content?: string;
-//     text: string;
-//     htmlString?: string;
-// }
-// export interface EssayType {
-//     _id: string;
-//     topic: string;
-//     topicId: string;
-//     author: string;
-//     email?: string;
-//     date: string;
-//     content: EssayContentType[];
-//     public: boolean;
-//     comment?: EssayComment[];
-//     like?: EssayLike[];
-
-//     commentCount?: number;
-//     likeCount?: number;
-// }
-
-// export interface EssayLike {
-//     _id?: ObjectId;
-//     essayId: ObjectId;
-//     email: ObjectId;
-//     date: Date;
-// }
-
-// export interface EssayComment {
-//     _id?: ObjectId;
-//     essayId: ObjectId;
-//     email: string;
-//     content: string;
-//     date: Date;
-// }

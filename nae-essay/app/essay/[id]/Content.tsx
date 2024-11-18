@@ -33,8 +33,8 @@ export default function Content() {
         }
     };
     const { data: session } = useSession();
-    const [Liked, setLiked] = useState<boolean>(!!(essay.like && essay.like[0]?._id));
-    const [likeId, setLikeId] = useState<string | undefined | null>(essay.like && essay.like[0]?._id);
+    const [Liked, setLiked] = useState<boolean>(!!(essay.myLikeIds && essay.myLikeIds.length > 0));
+    const [likeId, setLikeId] = useState<string | undefined | null>(essay.myLikeIds && essay.myLikeIds[0]);
     const queryClient = useQueryClient();
     const likeHandler = async () => {
         if (!session) {
@@ -164,7 +164,7 @@ export default function Content() {
                         <FilledLikeIcon fill="white" stroke="white" />
                     )}
 
-                    <p className="text-white text-[15px]">{essay.likeCount}</p>
+                    <p className="text-white text-[15px]">{essay.myLikeIds ? essay.myLikeIds.length : 0}</p>
                 </button>
             </main>
 

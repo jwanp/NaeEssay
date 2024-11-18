@@ -6,16 +6,16 @@ import { useQueryClient } from 'react-query';
 import toast from 'react-simple-toasts';
 interface TopicBookmarkProps {
     topicId: string;
-    bookmarkId?: string | null;
+    initialBookmarkId?: string | null;
 }
 import { useSession } from 'next-auth/react';
 
-export default function TopicBookmark({ topicId, bookmarkId: initialBookmarkId }: TopicBookmarkProps) {
+export default function TopicBookmark({ topicId, initialBookmarkId }: TopicBookmarkProps) {
     const { data: session } = useSession();
 
     const queryClient = useQueryClient();
     const [isBookmarked, setIsBookmarked] = useState<boolean>(
-        initialBookmarkId !== undefined && initialBookmarkId != ''
+        initialBookmarkId != null && initialBookmarkId !== undefined && initialBookmarkId != ''
     );
     const [bookmarkId, setBookmarkId] = useState<string | undefined | null>(initialBookmarkId);
 
@@ -74,7 +74,7 @@ export default function TopicBookmark({ topicId, bookmarkId: initialBookmarkId }
     return (
         <div
             onClick={clickHandler}
-            className="hover:border-teal-400 hover:text-teal-500 border border-teal-500 cursor-pointer w-[100px] items-center flex justify-center bg-gray-200 rounded-md h-[48px] text-sm text-teal-600">
+            className="w-full  rounded-3xl md:rounded-md  md:w-[100px] hover:border-teal-400 hover:text-teal-500 border border-teal-500 cursor-pointer  items-center flex justify-center bg-gray-200 h-[48px] text-sm text-teal-600">
             {isBookmarked ? <FilledBookmarkIcon /> : <BookmarkIcon />}
             <p className="px-1">북마크</p>
         </div>

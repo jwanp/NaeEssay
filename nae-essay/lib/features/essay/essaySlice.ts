@@ -35,6 +35,8 @@ export interface Essay {
     comment: Comment[];
     likeCount: number;
     commentCount: number;
+    myLikeIds: string[] | null;
+    myCommentCount: number | null;
 }
 
 const initialState: Essay = {
@@ -56,6 +58,8 @@ const initialState: Essay = {
     comment: [],
     likeCount: 0,
     commentCount: 0,
+    myLikeIds: null,
+    myCommentCount: null,
 };
 
 export const EssaySlice = createSlice({

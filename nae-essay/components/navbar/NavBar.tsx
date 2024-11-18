@@ -25,21 +25,21 @@ export default function NavBar({ session }: { session: Session | null }) {
             <div className="flex h-16 shadow-sm justify-between max-w-7xl mx-auto items-center ">
                 <Link href="/">Nae Essay</Link>
                 <div className="md:flex font-light text-sm hidden  ">
-                    <label className="inline-flex cursor-pointer">
+                    {/* <label className="inline-flex cursor-pointer">
                         <input type="checkbox" className="sr-only peer" />
                         <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-black"></div>
                         <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"></span>
-                    </label>
+                    </label> */}
                     <Link href="/topics" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         Topics
                     </Link>
                     <Link href="/learn" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         Learn
                     </Link>
-                    <Link href="/qna" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
+                    {/* <Link href="/qna" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         QnA
-                    </Link>
-                    <Link href="/posts" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
+                    </Link> */}
+                    <Link href="/mypage" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         My page
                     </Link>
                     {session ? (

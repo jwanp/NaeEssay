@@ -40,7 +40,7 @@ export default function EssayTableHeader({ topic, topicId }: { topic: string; to
 
                 <div className="hidden md:flex items-center">
                     {/* https://tailwindui.com/components/application-ui/forms/select-menus */}
-                    <TopicBookmark topicId={topicId} bookmarkId={bookmarkId} />
+                    <TopicBookmark topicId={topicId} initialBookmarkId={bookmarkId} />
                     <EssayDropDown />
                     <button
                         className="w-[96px] shrink-0 px-3 bg-teal-600 hover:bg-teal-500 duration-300 rounded-2xl text-white ml-[40px] h-[48px]"
@@ -53,7 +53,10 @@ export default function EssayTableHeader({ topic, topicId }: { topic: string; to
                 <h4 className="shrink-0 font-medium text-base text-teal-600">{essayCount}개 에세이</h4>
                 <EssayDropDown />
             </div>
-            <div className="px-4 md:hidden py-[20px]">
+            <div className="px-4 md:hidden pt-[20px] pb-[10px]">
+                <TopicBookmark topicId={topicId} initialBookmarkId={bookmarkId} />
+            </div>
+            <div className="px-4 md:hidden pb-[20px]">
                 <button
                     className="w-full shrink-0 px-3 bg-teal-600 hover:bg-teal-500 duration-300 rounded-3xl text-white h-[48px]"
                     onClick={clickHandler}>

@@ -6,6 +6,10 @@ import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
     let session = await getServerSession(request, response, authOptions);
+    let email = null;
+    if (session) {
+        email = session?.user?.email;
+    }
     try {
         let db = (await connectDB).db('nae-essay');
 
@@ -19,12 +23,31 @@ export default async function handler(request: NextApiRequest, response: NextApi
                     from: 'bookmark',
                     localField: '_id',
                     foreignField: 'topicId',
-                    as: 'allBookmarks',
+                    as: 'bookmark',
                 },
             },
             {
                 $addFields: {
-                    bookmarkCount: { $size: '$allBookmarks' },
+                    bookmarkCount: { $size: '$bookmark' },
+                    myBookmarkIds: {
+                        $cond: {
+                            if: { $ne: [email, null] }, // Check if email exists
+                            then: {
+                                $map: {
+                                    input: {
+                                        $filter: {
+                                            input: '$bookmark',
+                                            as: 'bookmark',
+                                            cond: { $eq: ['$$bookmark.email', email] }, // Filter bookmark by the user
+                                        },
+                                    },
+                                    as: 'bookmark',
+                                    in: '$$bookmark._id', // Extract `_id` field
+                                },
+                            },
+                            else: null, // Return null if no email
+                        },
+                    },
                 },
             },
             // Lookup all essays to get the total count
@@ -33,12 +56,27 @@ export default async function handler(request: NextApiRequest, response: NextApi
                     from: 'essay',
                     localField: '_id',
                     foreignField: 'topicId',
-                    as: 'allEssays',
+                    as: 'essay',
                 },
             },
             {
                 $addFields: {
-                    essayCount: { $size: '$allEssays' },
+                    essayCount: { $size: '$essay' },
+                    myEssayCount: {
+                        $cond: {
+                            if: { $ne: [email, null] }, // Check if email exists
+                            then: {
+                                $size: {
+                                    $filter: {
+                                        input: '$essay',
+                                        as: 'essay',
+                                        cond: { $eq: ['$$essay.email', email] }, // comments by the user
+                                    },
+                                },
+                            },
+                            else: null, // Return null if no email
+                        },
+                    },
                 },
             },
             // Sorting based on criteria
@@ -52,58 +90,10 @@ export default async function handler(request: NextApiRequest, response: NextApi
             // Remove intermediate arrays used for counting
             {
                 $project: {
-                    allBookmarks: 0,
-                    allEssays: 0,
+                    bookmark: 0,
                 },
             },
         ];
-
-        if (session?.user) {
-            pipeline.splice(
-                2,
-                0,
-                // Filter bookmarks by user email
-                {
-                    $lookup: {
-                        from: 'bookmark',
-                        let: { topicId: '$_id' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $and: [
-                                            { $eq: ['$topicId', '$$topicId'] },
-                                            { $eq: ['$email', session.user.email] },
-                                        ],
-                                    },
-                                },
-                            },
-                        ],
-                        as: 'bookmark',
-                    } as any,
-                },
-                // Filter essays by user email
-                {
-                    $lookup: {
-                        from: 'essay',
-                        let: { topicId: '$_id' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $and: [
-                                            { $eq: ['$topicId', '$$topicId'] },
-                                            { $eq: ['$email', session.user.email] },
-                                        ],
-                                    },
-                                },
-                            },
-                        ],
-                        as: 'essay',
-                    } as any,
-                }
-            );
-        }
 
         const topics = await db.collection('topic').aggregate(pipeline).toArray();
 

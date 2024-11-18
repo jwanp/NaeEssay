@@ -3,17 +3,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { connectDB } from '@/utils/database';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
-import { Essay } from '@/lib/features/essay/essaySlice';
-import { ObjectId } from 'mongodb';
 
-interface EssayDB extends Essay {
-    author: string | null | undefined;
-    date: Date;
-}
+import { ObjectId } from 'mongodb';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
     let session = await getServerSession(request, response, authOptions);
-    let requestBody: EssayDB | null = null;
+    let requestBody = null;
 
     // essayId 가 null 이면 새로 생성이고 만약 이미 있다면 수정이다.
     let essayId = request.body.essayId;
