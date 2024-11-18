@@ -1,4 +1,4 @@
-import { ComponentProps, FC, useRef } from 'react';
+import { ComponentProps, FC, useRef, useState } from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
@@ -92,6 +92,7 @@ export default function Editor({ idx, saveKey }: { idx: number; saveKey: number 
             /> */}
             <MyOnChangePlugin onChange={onContentChange} idx={idx} />
             <MyOnSavePlugin onSaveContent={onSaveContent} saveKey={saveKey} idx={idx} />
+
             <button
                 onClick={() => {
                     // if (editorStateRef.current) {

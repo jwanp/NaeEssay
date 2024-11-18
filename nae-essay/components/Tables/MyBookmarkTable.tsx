@@ -1,35 +1,50 @@
 'use client';
 
-import { EssayType } from '@/lib/definitions';
+import { TopicType } from '@/lib/definitions';
+import TopicSearch from '../Search/TopicSearch';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { PreviousIcon, NextIcon, LikeIcon, CommentIcon, FilledCommentIcon, FilledLikeIcon } from '../Icons/Icons';
-import EssaySearch from '../Search/EssaySearch';
+import {
+    DocumentIcon,
+    FilledDocumentIcon,
+    BookmarkIcon,
+    FilledBookmarkIcon,
+    PreviousIcon,
+    NextIcon,
+} from '../Icons/Icons';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
-import { changeEssayCount } from '@/lib/features/sort/SortSlice';
-
+import { getDatePrintFormat } from '@/utils/string';
+import { changeTopicCount } from '@/lib/features/sort/SortSlice';
+import toast, { toastConfig } from 'react-simple-toasts';
 import { useQuery } from 'react-query';
 
-import { getDatePrintFormat } from '@/utils/string';
-import { changeEssay } from '@/lib/features/essay/essaySlice';
-import { setEssayComments } from '@/lib/features/essay/essaySlice';
+toastConfig({
+    theme: 'failure',
+    duration: 5000,
+    position: 'top-right',
+    clickClosable: true,
+    maxVisibleToasts: 3,
+});
 
-export default function MyEssayTable(): React.ReactElement {
+export default function MyBookmarkTable() {
     const dispatch = useAppDispatch();
-
     // 데이터 불러오기
-
+    const topicSort = useAppSelector((state) => state.topicSort.name);
     const limit = 100;
 
     const {
-        data: essays = [],
+        data: topics = [],
         isLoading,
         isError,
-    } = useQuery<EssayType[]>('myEssays', async () => {
-        const response = await fetch(`/api/essay/my-essays?limit=${limit}`);
+    } = useQuery<TopicType[]>(['BookmarkedTopics'], async () => {
+        const response = await fetch(`/api/topic/my-bookmarks?limit=${limit}`);
         const data = await response.json();
-
+        if (!response.ok) {
+            toast(data);
+            return;
+        }
+        dispatch(changeTopicCount({ value: data.length }));
         return data;
     });
 
@@ -38,7 +53,7 @@ export default function MyEssayTable(): React.ReactElement {
     const [pageRange, setPageRange] = useState({ startPage: 0, endPage: 4 });
 
     const rowsPerPage: number = 15;
-    const totalPages = Math.ceil(essays.length / rowsPerPage);
+    const totalPages = Math.ceil(topics.length / rowsPerPage);
     const handlePrevious = () => {
         if (currentPage > 0) setCurrentPage(currentPage - 1);
     };
@@ -59,115 +74,100 @@ export default function MyEssayTable(): React.ReactElement {
 
     return (
         <div className="max-w-[1200px] bg-white rounded-sm">
-            <div className=" px-[20px] hidden md:flex w-full   text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
-                <div className="mr-4 content-center flex-1 font-medium text-base ">에세이</div>
-                <div className="mr-4 content-center w-[180px] font-medium text-base">날짜</div>
+            <div className=" px-[20px] hidden md:flex w-full text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
+                <div className="mr-4 content-center flex-1 font-medium text-base ">주제</div>
+                <div className="mr-4 content-center w-[180px] font-medium text-base">저자</div>
+                <div className="mr-4 content-center w-[105px] font-medium text-base">날짜</div>
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
-                {essays && essays.length <= 0 ? (
-                    <div className="flex justify-center content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
-                        새로운 에세이를 작성하세요
-                    </div>
-                ) : (
-                    essays &&
-                    Array.isArray(essays) &&
-                    essays
+                {topics.length != 0 &&
+                    topics
                         .slice(currentPage * rowsPerPage, currentPage * rowsPerPage + rowsPerPage)
-                        .map((essay, idx) => {
+                        .map((topic, idx) => {
                             return (
-                                <div key={essay._id}>
+                                <div key={topic._id}>
                                     {/* 전체 사이즈 */}
-                                    <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
+                                    <div className="hidden md:flex content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
                                         <Link
-                                            onClick={() => {
-                                                dispatch(changeEssay({ essay: essay }));
+                                            href={{
+                                                pathname: 'topics/' + topic._id,
+                                                query:
+                                                    topic.myBookmarkIds && topic.myBookmarkIds[0]
+                                                        ? { bookmarkId: topic.myBookmarkIds[0] }
+                                                        : undefined, // Passing bookmark status as query param
                                             }}
-                                            href={'/essay/' + essay._id}
-                                            className="mr-4 content-center flex-1 min-w-0">
-                                            <h4 className="truncate max-w-full font-normal text-base  text-black">
-                                                {essay.content[0].outline && essay.content[0].outline}
-                                            </h4>
-                                            <p className="truncate max-w-full text-[13px]">
-                                                {essay.content[0].text && essay.content[0].text}
-                                            </p>
+                                            className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
+                                            <div className="truncate max-w-full">{topic.title}</div>
                                         </Link>
+                                        <div className="min-w-0 mr-4 content-center w-[180px]">
+                                            <div className="truncate max-w-full">{topic.author}</div>
+                                        </div>
                                         <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                            {getDatePrintFormat(essay.date)}
+                                            {getDatePrintFormat(topic.date)}
                                         </div>
                                         <div className="content-center flex gap-5 w-[200px] text-[14px]">
-                                            <div className="flex content-center">
-                                                {essay.myCommentCount && essay.myCommentCount > 0 ? (
-                                                    <FilledCommentIcon />
+                                            <div className="flex  content-center">
+                                                {topic.myEssayCount && topic.myEssayCount > 0 ? (
+                                                    <FilledDocumentIcon />
                                                 ) : (
-                                                    <CommentIcon />
+                                                    <DocumentIcon />
                                                 )}
-                                                <div className="ml-[6px] content-center">{essay.commentCount}</div>
+                                                <div className="ml-[6px] content-center">{topic.essayCount}</div>
                                             </div>
                                             <div className="flex content-center">
-                                                {essay.myLikeIds && essay.myLikeIds.length > 0 ? (
-                                                    <FilledLikeIcon />
+                                                {topic.myBookmarkIds && topic.myBookmarkIds.length > 0 ? (
+                                                    <FilledBookmarkIcon />
                                                 ) : (
-                                                    <LikeIcon />
+                                                    <BookmarkIcon />
                                                 )}
-                                                <div className="ml-[6px] content-center">{essay.likeCount}</div>
+                                                <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
                                             </div>
-                                        </div>
-                                        <div>
-                                            <button className="font-[200] mr-6 hover:bg-teal-400 mx-auto bg-teal-500 rounded-md py-1 px-3 text-white text-center ">
-                                                AES
-                                            </button>
                                         </div>
                                     </div>
-
                                     {/* 테블릿 이하 사이즈 */}
-                                    <div
-                                        key={essay._id}
-                                        className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
+                                    <div className="md:hidden content-center px-[20px] py-[16px] bg-white text-[15px] font-[400px] border-[#f0f0f0] border-b  text-[#00000080]">
                                         <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
-                                            {getDatePrintFormat(essay.date)}
+                                            {getDatePrintFormat(topic.date)}
                                         </div>
                                         <Link
-                                            onClick={() => {
-                                                dispatch(changeEssay({ essay: essay }));
+                                            href={{
+                                                pathname: 'topics/' + topic._id,
+                                                query:
+                                                    topic.myBookmarkIds && topic.myBookmarkIds[0]
+                                                        ? { bookmarkId: topic.myBookmarkIds[0] }
+                                                        : undefined, // Passing bookmark status as query param
                                             }}
-                                            href={'/essay/' + essay._id}
-                                            className="mr-4 content-center flex-1 min-w-0">
-                                            <h4 className="truncate max-w-full font-normal text-base  text-black">
-                                                {essay.content[0].outline}
-                                            </h4>
-                                            <p className="truncate max-w-full text-[13px]">{essay.content[0].text}</p>
+                                            className="min-w-0 mr-4 content-center flex-1 font-normal text-base  text-black">
+                                            <div className="truncate max-w-full">{topic.title}</div>
                                         </Link>
                                         <div className="flex justify-between">
-                                            <div className="content-center flex justify-start gap-5 w-[200px] text-[14px]">
-                                                <div className="flex content-center">
-                                                    {essay.myCommentCount && essay.myCommentCount > 0 ? (
-                                                        <FilledCommentIcon />
-                                                    ) : (
-                                                        <CommentIcon />
-                                                    )}
-                                                    <div className="ml-[6px] content-center">{essay.commentCount}</div>
-                                                </div>
-                                                <div className="flex content-center">
-                                                    {essay.myLikeIds && essay.myLikeIds.length > 0 ? (
-                                                        <FilledLikeIcon />
-                                                    ) : (
-                                                        <LikeIcon />
-                                                    )}
-                                                    <div className="ml-[6px] content-center">{essay.likeCount}</div>
-                                                </div>
+                                            <div className="min-w-0 mr-4 content-center w-[180px]">
+                                                <div className="truncate max-w-full">{topic.author}</div>
                                             </div>
-                                            <div className="flex justify-end">
-                                                <button className="font-[200]  hover:bg-teal-400 mx-auto bg-teal-500 rounded-md py-1 px-3 text-white text-center ">
-                                                    AES
-                                                </button>
+                                            <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
+                                                <div className="flex  content-center">
+                                                    {topic.myEssayCount && topic.myEssayCount > 0 ? (
+                                                        <FilledDocumentIcon />
+                                                    ) : (
+                                                        <DocumentIcon />
+                                                    )}
+                                                    <div className="ml-[6px] content-center">{topic.essayCount}</div>
+                                                </div>
+                                                <div className="flex content-center">
+                                                    {topic.myBookmarkIds && topic.myBookmarkIds.length > 0 ? (
+                                                        <FilledBookmarkIcon />
+                                                    ) : (
+                                                        <BookmarkIcon />
+                                                    )}
+                                                    <div className="ml-[6px] content-center">{topic.bookmarkCount}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             );
-                        })
-                )}
+                        })}
             </div>
             <div className="w-full flex justify-center h-[80px]">
                 <nav className="px-[8px] py-[16px]" aria-label="Page navigation example">
@@ -220,7 +220,7 @@ export default function MyEssayTable(): React.ReactElement {
                     </ul>
                 </nav>
             </div>
-            <EssaySearch />
+            <TopicSearch />
         </div>
     );
 }

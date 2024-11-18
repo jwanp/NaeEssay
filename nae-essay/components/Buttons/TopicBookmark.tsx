@@ -40,6 +40,9 @@ export default function TopicBookmark({ topicId, initialBookmarkId }: TopicBookm
                     // Refetch queries related to bookmarks
                     queryClient.refetchQueries('topics');
                     queryClient.refetchQueries('essays');
+                    queryClient.refetchQueries('BookmarkedTopics');
+                    queryClient.refetchQueries('myEssays');
+                    queryClient.refetchQueries('myLikes');
                 } else {
                     setIsBookmarked(false);
                     const error = await response.json();
@@ -61,8 +64,16 @@ export default function TopicBookmark({ topicId, initialBookmarkId }: TopicBookm
                     // Refetch queries related to bookmarks
                     queryClient.refetchQueries('topics');
                     queryClient.refetchQueries('essays');
+                    queryClient.refetchQueries('BookmarkedTopics');
+                    queryClient.refetchQueries('myEssays');
+                    queryClient.refetchQueries('myLikes');
                 } else {
                     const error = await response.json();
+                    if (error.message == '이미 북마크를 했습니다.') {
+                        setIsBookmarked(true);
+                        setBookmarkId(error.bookmarkId);
+                        return;
+                    }
                     console.log(error.message);
                 }
             }

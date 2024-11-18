@@ -20,7 +20,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
         const { limit = '1000' } = request.query;
 
         const essays = await db
-            .collection('essay')
+            .collection('essay_like')
             .aggregate([
                 // Filter for essays with the matching topicId
                 {
@@ -28,6 +28,21 @@ export default async function handler(request: NextApiRequest, response: NextApi
                         email: email as string,
                     },
                 },
+                {
+                    $lookup: {
+                        from: 'essay',
+                        localField: 'essayId',
+                        foreignField: '_id',
+                        as: 'essay',
+                    },
+                },
+                {
+                    $unwind: '$essay', // Flatten the joined data
+                },
+                {
+                    $replaceRoot: { newRoot: '$essay' }, // Replace the root with essayDetails
+                },
+
                 {
                     $lookup: {
                         from: 'essay_like',
@@ -89,14 +104,19 @@ export default async function handler(request: NextApiRequest, response: NextApi
                     },
                 },
                 {
+                    $sort: {
+                        ...{ date: -1 },
+                    },
+                },
+                {
                     $project: {
                         like: 0,
                     },
                 },
             ])
             .toArray();
-        const limitedEssays = essays.slice(0, parseInt(limit as string, 10));
 
+        const limitedEssays = essays.slice(0, parseInt(limit as string, 10));
         return response.status(200).json(limitedEssays);
     } catch {
         return response.status(500).json('db 연결중 에러가 발생했습니다.');

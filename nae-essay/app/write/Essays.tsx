@@ -62,6 +62,9 @@ export default function Essays() {
                 dispatch(changeEssayId({ essayId: data.essayId }));
                 queryClient.refetchQueries('topics');
                 queryClient.refetchQueries('essays');
+                queryClient.refetchQueries('BookmarkedTopics');
+                queryClient.refetchQueries('myEssays');
+                queryClient.refetchQueries('myLikes');
             },
             onError: (error: any) => {
                 const errorMessage = error instanceof Error ? error.message : 'An error occurred';

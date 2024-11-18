@@ -11,8 +11,8 @@ export default async function handler(request: NextApiRequest, response: NextApi
     let requestBody = null;
 
     // essayId 가 null 이면 새로 생성이고 만약 이미 있다면 수정이다.
-    let essayId = request.body.essayId;
-    delete request.body.essayId;
+    let essayId = request.body._id;
+    delete request.body._id;
     request.body.topicId = new ObjectId(request.body.topicId);
     if (session) {
         requestBody = {

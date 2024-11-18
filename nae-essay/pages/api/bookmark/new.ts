@@ -46,7 +46,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
             .collection('bookmark')
             .findOne({ email: session.user.email, topicId: request.body.topicId });
         if (isBookmarked) {
-            return response.status(500).json({ message: '이미 북마크를 했습니다.' });
+            return response.status(500).json({ message: '이미 북마크를 했습니다.', bookmarkId: isBookmarked._id });
         }
         result = await db.collection('bookmark').insertOne({ ...requestBody });
         insertedId = result.insertedId.toString();

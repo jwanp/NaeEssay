@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 export interface Outline {
     outline: string;
     content?: string;
-    text: string;
+    text?: string;
     htmlString?: string;
 }
 
@@ -98,6 +98,13 @@ export const EssaySlice = createSlice({
         changeEssay(state, action: PayloadAction<{ essay: Essay }>) {
             return action.payload.essay;
         },
+        clearHtml(state) {
+            // Iterate over each content item and clear the htmlString property
+            state.content.forEach((outline) => {
+                outline.htmlString = undefined; // Or use null, depending on your needs
+            });
+        },
+
         increaseLikeCount(state) {
             if (state.likeCount == undefined) return undefined;
             state.likeCount = state.likeCount + 1;
@@ -144,4 +151,5 @@ export const {
     clearEssayComments,
     deleteEssayComment,
     pushEssayComment,
+    clearHtml,
 } = EssaySlice.actions;

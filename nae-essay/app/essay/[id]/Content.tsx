@@ -8,10 +8,18 @@ import { useSession } from 'next-auth/react';
 import toast from 'react-simple-toasts';
 import { useQueryClient } from 'react-query';
 import { increaseLikeCount, decreaseLikeCount } from '@/lib/features/essay/essaySlice';
-
+import { useRouter } from 'next/navigation';
 export default function Content() {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const essay = useAppSelector((state) => state.essay);
+    const hasRunRef = useRef(false);
+    useEffect(() => {
+        if (!essay.content[0].htmlString && !hasRunRef.current) {
+            hasRunRef.current = true;
+            router.back();
+        }
+    }, []);
     const essayContent = essay.content;
 
     const [activeIdx, setActiveIdx] = useState<number | null>(null);
@@ -57,6 +65,8 @@ export default function Content() {
 
                     // Refetch queries related to likes
                     queryClient.refetchQueries('essays');
+                    queryClient.refetchQueries('myEssays');
+                    queryClient.refetchQueries('myLikes');
                 } else {
                     setLiked(false);
                     const error = await response.json();
@@ -78,6 +88,8 @@ export default function Content() {
 
                     // Refetch queries related to likes
                     queryClient.refetchQueries('essays');
+                    queryClient.refetchQueries('myEssays');
+                    queryClient.refetchQueries('myLikes');
                 } else {
                     const error = await response.json();
                     console.log(error.message);
@@ -118,8 +130,10 @@ export default function Content() {
                                 );
                             } else {
                                 return (
-                                    <li key={idx} className="truncate">
-                                        <a href={`#${content.outline}`}>{content.outline}</a>
+                                    <li key={idx} className=" truncate">
+                                        <a className="hover:underline " href={`#${content.outline}`}>
+                                            {content.outline}
+                                        </a>
                                     </li>
                                 );
                             }
@@ -152,7 +166,7 @@ export default function Content() {
                     ref={buttonRef}
                     onClick={likeHandler}
                     type="button"
-                    className="bg-teal-400 mx-auto flex gap-3 items-center rounded px-6 pb-1.5 pt-1.5 text-xs uppercase leading-normal shadow-lg transition duration-150 ease-in-out 
+                    className="bg-teal-400 mx-auto flex gap-3 items-center rounded px-6 py-2 text-xs uppercase leading-normal shadow-lg transition duration-150 ease-in-out 
            hover:bg-teal-300 hover:shadow-md 
             focus:shadow-md focus:outline-none focus:ring-0 
             active:shadow-md 
@@ -163,8 +177,6 @@ export default function Content() {
                     ) : (
                         <FilledLikeIcon fill="white" stroke="white" />
                     )}
-
-                    <p className="text-white text-[15px]">{essay.myLikeIds ? essay.myLikeIds.length : 0}</p>
                 </button>
             </main>
 
@@ -182,8 +194,10 @@ export default function Content() {
                                 );
                             } else {
                                 return (
-                                    <li key={idx} className="truncate">
-                                        <a href={`#${content.outline}`}>{content.outline}</a>
+                                    <li key={idx} className=" truncate">
+                                        <a className="hover:underline " href={`#${content.outline}`}>
+                                            {content.outline}
+                                        </a>
                                     </li>
                                 );
                             }

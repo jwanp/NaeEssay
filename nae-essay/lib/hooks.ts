@@ -33,6 +33,8 @@ export const usePostComment = () => {
             onSuccess: () => {
                 // Refetch the "essays" query to update the comments list
                 queryClient.refetchQueries('essays');
+                queryClient.refetchQueries('myEssays');
+                queryClient.refetchQueries('myLikes');
             },
         }
     );
@@ -58,6 +60,8 @@ export const useUpdateComment = () => {
             // On success, refetch the comments to update the list
             onSuccess: () => {
                 queryClient.refetchQueries('essays');
+                queryClient.refetchQueries('myEssays');
+                queryClient.refetchQueries('myLikes');
             },
         }
     );
@@ -83,6 +87,8 @@ export const useDeleteComment = () => {
             // On success, refetch the comments to update the list
             onSuccess: () => {
                 queryClient.refetchQueries('essays');
+                queryClient.refetchQueries('myEssays');
+                queryClient.refetchQueries('myLikes');
             },
         }
     );

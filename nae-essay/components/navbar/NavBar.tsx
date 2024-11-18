@@ -6,12 +6,14 @@ import { signIn, signOut } from 'next-auth/react';
 
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { openNav } from './navSlice';
-import { getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { Session } from 'next-auth';
 
 export default function NavBar({ session }: { session: Session | null }) {
     // const dispatch = useAppDispatch();null
     // const isOpen = useAppSelector((state) => state.navOpen.isOpen);
+    const { data: userSession, status } = useSession();
+    let email = userSession?.user?.email;
     useEffect(() => {
         let isOpen: HTMLInputElement = document.getElementById('isOpen') as HTMLInputElement;
         if (isOpen.checked) {
@@ -39,9 +41,11 @@ export default function NavBar({ session }: { session: Session | null }) {
                     {/* <Link href="/qna" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         QnA
                     </Link> */}
-                    <Link href="/mypage" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
-                        My page
-                    </Link>
+                    {email && (
+                        <Link href="/mypage" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
+                            My page
+                        </Link>
+                    )}
                     {session ? (
                         <button
                             onClick={() => {

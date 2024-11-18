@@ -10,8 +10,8 @@ export default async function handler(request: NextApiRequest, response: NextApi
     try {
         // user 가 다르다면 return
         let item = await db.collection('topic').findOne({ _id: new ObjectId(request.query._id as string) });
-        if (item?.author) {
-            if (!session || item.author != session.user?.email) {
+        if (item?.email) {
+            if (!session || item.email != session.user?.email) {
                 return response.status(400).json('권한이 없습니다.');
             }
         }

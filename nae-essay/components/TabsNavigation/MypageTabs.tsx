@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { TETabs, TETabsContent, TETabsItem, TETabsPane } from 'tw-elements-react';
 import MyEssayTable from '../Tables/MyEssayTable';
+import MyLikeTable from '../Tables/MyLikeTable';
+import MyBookmarkTable from '../Tables/MyBookmarkTable';
 export default function MypageTabs(): JSX.Element {
     const [basicActive, setBasicActive] = useState('tab1');
 
@@ -19,33 +21,34 @@ export default function MypageTabs(): JSX.Element {
 
     return (
         <div className="mb-3 mt-5 px-2">
-            <div className="flex justify-between">
+            <div className="flex justify-between align-middle">
                 <TETabs className="">
                     <TETabsItem
-                        className={`${basicActive == 'tab1' && ' border-teal-500'} hover:bg-gray-200 text-[16px] font-[300] px-4 pt-4 pb-3 `}
+                        className={`${basicActive == 'tab1' && ' border-teal-500'}  hover:bg-gray-200 px-3  md:px-4 pt-3 pb-2 md:pt-4 md:pb-3 `}
                         onClick={() => handleBasicClick('tab1')}
                         active={basicActive === 'tab1'}>
-                        내 에세이
+                        <span className="text-[14px] md:text-[16px] font-[300]">내 에세이</span>
                     </TETabsItem>
                     <TETabsItem
-                        className={`${basicActive == 'tab2' && ' border-teal-500'} hover:bg-gray-200 text-[16px] font-[300] px-6 pt-4 pb-3 `}
+                        className={`${basicActive == 'tab2' && ' border-teal-500'} hover:bg-gray-200 px-4  md:px-6 pt-3 pb-2 md:pt-4 md:pb-3 `}
                         onClick={() => handleBasicClick('tab2')}
                         active={basicActive === 'tab2'}>
-                        좋아요
+                        <span className="text-[14px] md:text-[16px] font-[300]">좋아요</span>
                     </TETabsItem>
                     <TETabsItem
-                        className={`${basicActive == 'tab3' && ' border-teal-500'} hover:bg-gray-200 text-[16px] font-[300] px-6 pt-4 pb-3 `}
+                        className={`${basicActive == 'tab3' && ' border-teal-500'} hover:bg-gray-200 px-4  md:px-6 pt-3 pb-2 md:pt-4 md:pb-3 `}
                         onClick={() => handleBasicClick('tab3')}
                         active={basicActive === 'tab3'}>
-                        북마크
+                        <span className="text-[14px] md:text-[16px] font-[300]">북마크</span>
                     </TETabsItem>
                 </TETabs>
-                <div className="relative">
+
+                <div className="relative flex items-center">
                     <button
                         onClick={() => {
                             toggleDropdown();
                         }}
-                        className={`my-5 mx-5 inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:bg-gray-300  focus:outline-none`}
+                        className={` mx-5 inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:bg-gray-300  focus:outline-none`}
                         type="button">
                         <svg
                             className="w-4 h-4"
@@ -77,8 +80,12 @@ export default function MypageTabs(): JSX.Element {
                 <TETabsPane show={basicActive === 'tab1'}>
                     <MyEssayTable />
                 </TETabsPane>
-                <TETabsPane show={basicActive === 'tab2'}>Tab 2 content</TETabsPane>
-                <TETabsPane show={basicActive === 'tab3'}>Tab 3 content</TETabsPane>
+                <TETabsPane show={basicActive === 'tab2'}>
+                    <MyLikeTable></MyLikeTable>
+                </TETabsPane>
+                <TETabsPane show={basicActive === 'tab3'}>
+                    <MyBookmarkTable />
+                </TETabsPane>
             </TETabsContent>
         </div>
     );

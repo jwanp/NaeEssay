@@ -3,7 +3,7 @@
 import { EssayType } from '@/lib/definitions';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { PreviousIcon, NextIcon, LikeIcon, CommentIcon, FilledCommentIcon, FilledLikeIcon } from '../Icons/Icons';
+import { PreviousIcon, NextIcon, LikeIcon, CommentIcon, FilledLikeIcon, FilledCommentIcon } from '../Icons/Icons';
 import EssaySearch from '../Search/EssaySearch';
 
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
@@ -14,20 +14,19 @@ import { useQuery } from 'react-query';
 import { getDatePrintFormat } from '@/utils/string';
 import { changeEssay } from '@/lib/features/essay/essaySlice';
 import { setEssayComments } from '@/lib/features/essay/essaySlice';
-
-export default function MyEssayTable(): React.ReactElement {
+export default function MyLikeTable(): React.ReactElement {
     const dispatch = useAppDispatch();
 
     // 데이터 불러오기
-
+    const essaySort = useAppSelector((state) => state.essaySort.name);
     const limit = 100;
 
     const {
         data: essays = [],
         isLoading,
         isError,
-    } = useQuery<EssayType[]>('myEssays', async () => {
-        const response = await fetch(`/api/essay/my-essays?limit=${limit}`);
+    } = useQuery<EssayType[]>(['myLikes'], async () => {
+        const response = await fetch(`/api/essay/my-likes?limit=${limit}`);
         const data = await response.json();
 
         return data;
@@ -57,11 +56,16 @@ export default function MyEssayTable(): React.ReactElement {
         setPageRange({ startPage, endPage });
     }, [currentPage, totalPages]);
 
+    useEffect(() => {
+        dispatch(changeEssayCount({ value: essays.length }));
+    }, [essays]);
+
     return (
         <div className="max-w-[1200px] bg-white rounded-sm">
             <div className=" px-[20px] hidden md:flex w-full   text-left h-[56px] text-[#000000b3] border-[#f0f0f0] border-b-2">
                 <div className="mr-4 content-center flex-1 font-medium text-base ">에세이</div>
-                <div className="mr-4 content-center w-[180px] font-medium text-base">날짜</div>
+                <div className="mr-4 content-center w-[180px] font-medium text-base">저자</div>
+                <div className="mr-4 content-center w-[105px] font-medium text-base">날짜</div>
                 <div className="content-center w-[200px]"></div>
             </div>
             <div>
@@ -92,6 +96,9 @@ export default function MyEssayTable(): React.ReactElement {
                                                 {essay.content[0].text && essay.content[0].text}
                                             </p>
                                         </Link>
+                                        <div className="min-w-0 mr-4 content-center w-[180px]">
+                                            <div className="truncate max-w-full">{essay.author}</div>
+                                        </div>
                                         <div className="whitespace-nowrap mr-4 content-center w-[105px] text-[13px]">
                                             {getDatePrintFormat(essay.date)}
                                         </div>
@@ -113,13 +120,7 @@ export default function MyEssayTable(): React.ReactElement {
                                                 <div className="ml-[6px] content-center">{essay.likeCount}</div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <button className="font-[200] mr-6 hover:bg-teal-400 mx-auto bg-teal-500 rounded-md py-1 px-3 text-white text-center ">
-                                                AES
-                                            </button>
-                                        </div>
                                     </div>
-
                                     {/* 테블릿 이하 사이즈 */}
                                     <div
                                         key={essay._id}
@@ -139,13 +140,17 @@ export default function MyEssayTable(): React.ReactElement {
                                             <p className="truncate max-w-full text-[13px]">{essay.content[0].text}</p>
                                         </Link>
                                         <div className="flex justify-between">
-                                            <div className="content-center flex justify-start gap-5 w-[200px] text-[14px]">
+                                            <div className="min-w-0 mr-4 content-center w-[180px]">
+                                                <div className="truncate max-w-full">{essay.author}</div>
+                                            </div>
+                                            <div className="content-center flex justify-end gap-5 w-[200px] text-[14px]">
                                                 <div className="flex content-center">
                                                     {essay.myCommentCount && essay.myCommentCount > 0 ? (
                                                         <FilledCommentIcon />
                                                     ) : (
                                                         <CommentIcon />
                                                     )}
+
                                                     <div className="ml-[6px] content-center">{essay.commentCount}</div>
                                                 </div>
                                                 <div className="flex content-center">
@@ -156,11 +161,6 @@ export default function MyEssayTable(): React.ReactElement {
                                                     )}
                                                     <div className="ml-[6px] content-center">{essay.likeCount}</div>
                                                 </div>
-                                            </div>
-                                            <div className="flex justify-end">
-                                                <button className="font-[200]  hover:bg-teal-400 mx-auto bg-teal-500 rounded-md py-1 px-3 text-white text-center ">
-                                                    AES
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
