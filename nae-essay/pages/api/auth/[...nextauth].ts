@@ -46,6 +46,10 @@ export const authOptions: AuthOptions = {
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60, // 30 days
     },
+    pages: {
+        signIn: '/signin', // Define your custom sign-in page route
+        error: '/signin',
+    },
     callbacks: {
         // Callback for handling JWT creation
         jwt: async ({ token, user }: { token: JWT; user?: any }) => {
