@@ -143,54 +143,57 @@ export default function EssayComments() {
                                             <time>{getDatePrintFormat(comment.date)}</time>
                                         </p>
                                     </div>
-                                    <button
-                                        onClick={() => {
-                                            toggleDropdown(index);
-                                        }}
-                                        className={`inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:bg-gray-300  focus:outline-none`}
-                                        type="button">
-                                        <svg
-                                            className="w-4 h-4"
-                                            aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor"
-                                            viewBox="0 0 16 3">
-                                            <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
-                                        </svg>
-                                        <span className="sr-only">Comment settings</span>
-                                    </button>
                                     {session?.user?.email == comment.email && (
-                                        <div
-                                            className={`${!isDropdownOpen[index] && 'hidden'} top-[65px] right-[-15px] absolute z-10 w-28 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600`}>
-                                            <ul className="py-1 text-sm text-gray-700 ">
-                                                <li>
-                                                    <button
-                                                        onClick={async () => {
-                                                            toggleDropdown(index);
-                                                            setIsCommentUpdating((state) => {
-                                                                const copy = [...state];
-                                                                copy[index] = !state[index];
-                                                                return copy;
-                                                            });
-                                                        }}
-                                                        className="w-full block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                        {isCommentUpdating[index] ? '취소' : '수정'}
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button
-                                                        onClick={async () => {
-                                                            const result = await deleteComment.mutateAsync({
-                                                                commentId: comment._id,
-                                                            });
-                                                            dispatch(deleteEssayComment({ idx: index }));
-                                                            toggleDropdown(index);
-                                                        }}
-                                                        className="w-full block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                        삭제
-                                                    </button>
-                                                </li>
-                                            </ul>
+                                        <div>
+                                            <button
+                                                onClick={() => {
+                                                    toggleDropdown(index);
+                                                }}
+                                                className={`inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:bg-gray-300  focus:outline-none`}
+                                                type="button">
+                                                <svg
+                                                    className="w-4 h-4"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 16 3">
+                                                    <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+                                                </svg>
+                                                <span className="sr-only">Comment settings</span>
+                                            </button>
+
+                                            <div
+                                                className={`${!isDropdownOpen[index] && 'hidden'} top-[65px] right-[-15px] absolute z-10 w-28 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600`}>
+                                                <ul className="py-1 text-sm text-gray-700 ">
+                                                    <li>
+                                                        <button
+                                                            onClick={async () => {
+                                                                toggleDropdown(index);
+                                                                setIsCommentUpdating((state) => {
+                                                                    const copy = [...state];
+                                                                    copy[index] = !state[index];
+                                                                    return copy;
+                                                                });
+                                                            }}
+                                                            className="w-full block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            {isCommentUpdating[index] ? '취소' : '수정'}
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button
+                                                            onClick={async () => {
+                                                                const result = await deleteComment.mutateAsync({
+                                                                    commentId: comment._id,
+                                                                });
+                                                                dispatch(deleteEssayComment({ idx: index }));
+                                                                toggleDropdown(index);
+                                                            }}
+                                                            className="w-full block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                            삭제
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     )}
                                 </footer>

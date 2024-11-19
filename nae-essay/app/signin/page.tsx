@@ -105,7 +105,7 @@ export default function SignIn() {
     };
 
     return (
-        <div className="min-w-[400px]  flex flex-col justify-center font-[sans-serif] sm:h-screen p-4">
+        <div className="min-w-[400px]  flex flex-col justify-center font-[sans-serif] h-screen p-4">
             <div className="bg-white max-w-md w-full mx-auto border border-gray-300 rounded-2xl p-8">
                 <div className="text-center mb-6">
                     <Link href="/">

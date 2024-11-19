@@ -50,6 +50,7 @@ import MyOnSavePlugin from './plugins/MyOnSavePlugin';
 
 export default function Editor({ idx, saveKey }: { idx: number; saveKey: number }) {
     const dispatch = useAppDispatch();
+    const essayId = useAppSelector((state) => state.essay._id);
 
     function onContentChange(editorState: EditorState, idx: number) {
         const editorStateJSON = editorState.toJSON();
@@ -92,13 +93,6 @@ export default function Editor({ idx, saveKey }: { idx: number; saveKey: number 
             /> */}
             <MyOnChangePlugin onChange={onContentChange} idx={idx} />
             <MyOnSavePlugin onSaveContent={onSaveContent} saveKey={saveKey} idx={idx} />
-
-            <button
-                onClick={() => {
-                    // if (editorStateRef.current) {
-                    //     saveEssayContent(JSON.stringify(editorStateRef.current), idx);
-                    // }
-                }}></button>
             <HistoryPlugin />
             <AutoFocusPlugin />
             <MarkdownShortcutPlugin transformers={TRANSFORMERS} />

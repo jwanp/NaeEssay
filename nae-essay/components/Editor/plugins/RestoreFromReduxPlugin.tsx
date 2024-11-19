@@ -24,6 +24,8 @@ export default function RestoreFromReduxPlugin({ idx }: { idx: number }) {
                 const parser = new DOMParser();
                 const dom = parser.parseFromString(editorHtml, 'text/html');
                 const nodes = $generateNodesFromDOM(editor, dom);
+                const root = $getRoot();
+                root.clear();
                 $getRoot().select();
                 $insertNodes(nodes);
             });

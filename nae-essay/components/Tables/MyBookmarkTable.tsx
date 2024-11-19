@@ -52,7 +52,7 @@ export default function MyBookmarkTable() {
     const [currentPage, setCurrentPage] = useState(0);
     const [pageRange, setPageRange] = useState({ startPage: 0, endPage: 4 });
 
-    const rowsPerPage: number = 15;
+    const rowsPerPage: number = 10;
     const totalPages = Math.ceil(topics.length / rowsPerPage);
     const handlePrevious = () => {
         if (currentPage > 0) setCurrentPage(currentPage - 1);
