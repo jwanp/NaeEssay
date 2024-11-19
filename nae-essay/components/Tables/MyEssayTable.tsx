@@ -14,11 +14,13 @@ import { useQuery } from 'react-query';
 import { getDatePrintFormat } from '@/utils/string';
 import { changeEssay } from '@/lib/features/essay/essaySlice';
 import { setEssayComments } from '@/lib/features/essay/essaySlice';
+import ScoringModal from '../Modals/ScoringModal';
 
 export default function MyEssayTable(): React.ReactElement {
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [essayId, setEssayId] = useState<string | null>(null);
+    const [essayContent, setEssayContent] = useState<string | null>(null);
     const dispatch = useAppDispatch();
-
-    // 데이터 불러오기
 
     const limit = 100;
 
@@ -29,7 +31,6 @@ export default function MyEssayTable(): React.ReactElement {
     } = useQuery<EssayType[]>('myEssays', async () => {
         const response = await fetch(`/api/essay/my-essays?limit=${limit}`);
         const data = await response.json();
-
         return data;
     });
 
@@ -64,6 +65,14 @@ export default function MyEssayTable(): React.ReactElement {
                 <div className="mr-4 content-center w-[180px] font-medium text-base">날짜</div>
                 <div className="content-center w-[200px]"></div>
             </div>
+            <ScoringModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                }}
+                essayId={essayId}
+                content={essayContent}
+            />
             <div>
                 {essays && essays.length <= 0 ? (
                     <div className="flex justify-center content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
@@ -114,7 +123,16 @@ export default function MyEssayTable(): React.ReactElement {
                                             </div>
                                         </div>
                                         <div>
-                                            <button className="font-[200] mr-6 hover:bg-teal-400 mx-auto bg-teal-500 rounded-md py-1 px-3 text-white text-center ">
+                                            <button
+                                                onClick={() => {
+                                                    const contentText = essay.content
+                                                        .map((item) => item.text)
+                                                        .join(' ');
+                                                    setEssayId(essay._id);
+                                                    setEssayContent(contentText);
+                                                    setIsModalOpen(true);
+                                                }}
+                                                className="font-[200] mr-6 hover:bg-teal-400 mx-auto bg-teal-500 rounded-md py-1 px-3 text-white text-center ">
                                                 AES
                                             </button>
                                         </div>
@@ -158,7 +176,11 @@ export default function MyEssayTable(): React.ReactElement {
                                                 </div>
                                             </div>
                                             <div className="flex justify-end">
-                                                <button className="font-[200]  hover:bg-teal-400 mx-auto bg-teal-500 rounded-md py-1 px-3 text-white text-center ">
+                                                <button
+                                                    onClick={() => {
+                                                        setIsModalOpen(true);
+                                                    }}
+                                                    className="font-[200]  hover:bg-teal-400 mx-auto bg-teal-500 rounded-md py-1 px-3 text-white text-center ">
                                                     AES
                                                 </button>
                                             </div>
