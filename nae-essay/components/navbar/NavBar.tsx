@@ -26,12 +26,7 @@ export default function NavBar({ session }: { session: Session | null }) {
         <div className=" bg-white px-6 fixed top-0 left-0 z-50 w-full ">
             <div className="flex h-16 shadow-sm justify-between max-w-7xl mx-auto items-center ">
                 <Link href="/">Nae Essay</Link>
-                <div className="md:flex font-light text-sm hidden  ">
-                    {/* <label className="inline-flex cursor-pointer">
-                        <input type="checkbox" className="sr-only peer" />
-                        <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-black"></div>
-                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"></span>
-                    </label> */}
+                <div className="hidden md:flex font-light text-sm   ">
                     <Link href="/topics" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         Topics
                     </Link>
@@ -83,11 +78,24 @@ export default function NavBar({ session }: { session: Session | null }) {
             </div>
             {isOpen && (
                 <div className="bg-white flex flex-col py-5 px-6 gap-3 md:hidden">
-                    <Link
-                        href="/signin"
-                        className="flex justify-center items-center font-light h-9 mx-5  text-white text-center bg-teal-500 hover:bg-teal-600 transition duration-300 rounded-md">
-                        Sign in
-                    </Link>
+                    {!session ? (
+                        <button
+                            onClick={() => {
+                                signIn();
+                            }}
+                            className="flex justify-center items-center font-light h-9 mx-5  text-white text-center bg-teal-500 hover:bg-teal-600 transition duration-300 rounded-md">
+                            Sign in
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => {
+                                signOut();
+                            }}
+                            className="flex justify-center items-center font-light h-9 mx-5  text-white text-center bg-red-400 hover:bg-red-300 transition duration-300 rounded-md">
+                            Sign out
+                        </button>
+                    )}
+
                     <Link
                         href="/topics"
                         className="flex justify-center items-center font-light h-10 mx-5  rounded-md hover:bg-gray-100 transition duration-300">
@@ -98,16 +106,11 @@ export default function NavBar({ session }: { session: Session | null }) {
                         className="flex justify-center items-center font-light h-10 mx-5  rounded-md hover:bg-gray-100 transition duration-300">
                         Learn
                     </Link>
-                    <Link
+                    {/* <Link
                         href="/qna"
                         className="flex justify-center items-center font-light h-10 mx-5  rounded-md hover:bg-gray-100 transition duration-300">
                         QnA
-                    </Link>
-                    <Link
-                        href="/posts"
-                        className="flex justify-center items-center font-light h-9 mx-5 px-4 py-1 rounded-md hover:bg-gray-200 transition duration-300 ">
-                        Posts
-                    </Link>
+                    </Link> */}
                 </div>
             )}
         </div>
