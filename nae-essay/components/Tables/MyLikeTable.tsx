@@ -71,7 +71,7 @@ export default function MyLikeTable(): React.ReactElement {
             <div>
                 {essays && essays.length <= 0 ? (
                     <div className="flex justify-center content-center px-[20px] py-[16px] bg-white  text-[15px] font-[400px] border-[#f0f0f0] border-b h-[67px] text-[#00000080] ">
-                        새로운 에세이를 작성하세요
+                        에세이에 좋아요를 눌러보세요
                     </div>
                 ) : (
                     essays &&
