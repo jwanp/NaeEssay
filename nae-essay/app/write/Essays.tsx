@@ -86,9 +86,9 @@ export default function Essays() {
         if (saveKey != 0 && saveKey > saveRef.current && essayHTMLString != '') {
             saveRef.current = saveKey;
             const filteredEssay = {
-                ...essay, // Keep other properties of `essay`
+                ...essay, 
                 content: essay.content.map((item) => {
-                    // Return a new object with `content` removed
+                    
                     const { content, ...rest } = item; // Exclude the `content` property
                     return rest;
                 }),

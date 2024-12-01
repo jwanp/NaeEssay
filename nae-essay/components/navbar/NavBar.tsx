@@ -106,11 +106,11 @@ export default function NavBar({ session }: { session: Session | null }) {
                         className="flex justify-center items-center font-light h-10 mx-5  rounded-md hover:bg-gray-100 transition duration-300">
                         Learn
                     </Link>
-                    {/* <Link
-                        href="/qna"
+                    <Link
+                        href="/mypage"
                         className="flex justify-center items-center font-light h-10 mx-5  rounded-md hover:bg-gray-100 transition duration-300">
-                        QnA
-                    </Link> */}
+                        My page
+                    </Link>
                 </div>
             )}
         </div>

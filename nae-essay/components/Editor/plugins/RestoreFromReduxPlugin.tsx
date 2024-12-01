@@ -12,26 +12,27 @@ export default function RestoreFromReduxPlugin({ idx }: { idx: number }) {
     const editorContent = essay.content[idx]?.content;
     const dispatch = useAppDispatch();
 
-    // Use a ref to track if the effect has already run
+    
     const hasRunRef = useRef(false);
 
     useEffect(() => {
-        // Only run the effect if it hasn't run before
+        
         if (editorHtml && !editorContent && !hasRunRef.current) {
-            hasRunRef.current = true; // Mark as run
+            hasRunRef.current = true; 
 
             editor.update(() => {
                 const parser = new DOMParser();
                 const dom = parser.parseFromString(editorHtml, 'text/html');
                 const nodes = $generateNodesFromDOM(editor, dom);
+
                 const root = $getRoot();
                 root.clear();
                 $getRoot().select();
                 $insertNodes(nodes);
             });
-            dispatch(clearHtml()); // Clear HTML after inserting
+            dispatch(clearHtml()); 
         }
-    }, [editorHtml, editorContent, dispatch, editor]); // Dependencies
+    }, [editorHtml, editorContent, dispatch, editor]); 
 
     return null;
 }
