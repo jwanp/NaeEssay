@@ -30,9 +30,9 @@ export default function NavBar({ session }: { session: Session | null }) {
                     <Link href="/topics" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         Topics
                     </Link>
-                    <Link href="/learn" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
+                    {/* <Link href="/learn" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         Learn
-                    </Link>
+                    </Link> */}
                     {/* <Link href="/qna" className="px-5 hover:text-teal-600 transition duration-300 pt-1">
                         QnA
                     </Link> */}
@@ -101,11 +101,11 @@ export default function NavBar({ session }: { session: Session | null }) {
                         className="flex justify-center items-center font-light h-10 mx-5  rounded-md hover:bg-gray-100 transition duration-300">
                         Topics
                     </Link>
-                    <Link
+                    {/* <Link
                         href="/learn"
                         className="flex justify-center items-center font-light h-10 mx-5  rounded-md hover:bg-gray-100 transition duration-300">
                         Learn
-                    </Link>
+                    </Link> */}
                     <Link
                         href="/mypage"
                         className="flex justify-center items-center font-light h-10 mx-5  rounded-md hover:bg-gray-100 transition duration-300">

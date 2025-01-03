@@ -9,7 +9,7 @@ import { changeOutline, addOutline, deleteOutline } from '@/lib/features/essay/e
 enum Edit {
     Delete,
     None,
-    ReArrange,
+    // ReArrange,
 }
 
 export default function SideBar() {
@@ -27,8 +27,8 @@ export default function SideBar() {
                         onClick={() => {
                             if (editTopic == Edit.None) {
                                 setEditTopic(Edit.Delete);
-                            } else if (editTopic == Edit.Delete) {
-                                setEditTopic(Edit.ReArrange);
+                                // } else if (editTopic == Edit.Delete) {
+                                //     setEditTopic(Edit.ReArrange);
                             } else {
                                 setEditTopic(Edit.None);
                             }
@@ -50,16 +50,16 @@ export default function SideBar() {
                                         <MdDeleteOutline></MdDeleteOutline>
                                     </button>
                                 )}
-                                {editTopic == Edit.ReArrange && (
+                                {/* {editTopic == Edit.ReArrange && (
                                     <button className="flex items-center p-2 bg-teal-500 rounded-s-md shadow-md text-white hover:bg-teal-400">
                                         <RxHamburgerMenu></RxHamburgerMenu>
                                     </button>
-                                )}
+                                )} */}
 
                                 <textarea
                                     className="flex p-2 shadow-md  w-full focus:outline-none resize-none h-10"
                                     rows={1}
-                                    placeholder="a new topic"
+                                    placeholder="새로운 주제 입력"
                                     defaultValue={outlineContent.outline}
                                     onChange={(e) => {
                                         const target = e.target as HTMLTextAreaElement;
@@ -77,7 +77,7 @@ export default function SideBar() {
                         onClick={() => {
                             dispatch(addOutline());
                         }}>
-                        +<span className="text-xs"> Add a new outline Topic</span>
+                        +<span className="text-xs">새로운 Outline 추가 하기</span>
                     </button>
                 </ul>
             </div>
